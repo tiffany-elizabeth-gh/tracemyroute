@@ -1,11 +1,9 @@
 import re
 
 
-
 def trace_input():
 
     # variables needed to begin a trace
-    
     destination = ""
     source_addr = default
     max_hops = 50   # OPTIONAL ADD ON user input for max_hops
@@ -31,10 +29,9 @@ def trace_input():
         print("Invalid input. Please enter a valid URL or IP address.")
 
 
+# Will eventually bring source_address() in trace_input() 
+# because it makes more sense for them to be in the same code
 
 
 
-
-    # OPTIONAL
-    # add the optional user input for a starting IP address 
-    # this would allow the user to specify a specific starting point for the trace
+    
