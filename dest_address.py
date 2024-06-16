@@ -76,3 +76,7 @@ if __name__ == "__main__":
 
 
 # research parsing to see if that will be important to the overall traceroute
+# upon researching, parsing seems like it could be important for the output of the trace details
+# placed the parsing function in the trace_route function
+
+
