@@ -23,5 +23,7 @@ def source_address():
         # source ip is hardcoded for set up purposes
         # FUTURE add code to retrieve default source address rather than hardcode
         source_ip = "8.8.8.8"  # default source IP address
+        print(f"Default source: {source_ip} is being used.") # printing source_ip for error checking
         return source_ip
-    
+
+source = source_address()
