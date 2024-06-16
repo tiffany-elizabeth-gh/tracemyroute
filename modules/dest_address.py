@@ -14,7 +14,7 @@ import argparse
 
 
 
-def dest_address():
+def dest_address(destination):
 
     destination = input("Enter a destination (URL/IP): ")
 
@@ -69,6 +69,9 @@ def dest_address():
             print("Invalid input. Please enter a valid URL or IP address.")
     else:
         print("Invalid input. Please enter a valid URL or IP address.")
+
+if __name__ == "__main__":
+    dest_address("")
 
 
 
