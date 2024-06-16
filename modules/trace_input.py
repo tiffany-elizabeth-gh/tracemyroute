@@ -29,6 +29,8 @@ def trace_input():
             print("Invalid input. Please enter a valid URL or IP address.")
     else:
         print("Invalid input. Please enter a valid URL or IP address.")
+    
+    return destination
 
 trace = trace_input()
 
