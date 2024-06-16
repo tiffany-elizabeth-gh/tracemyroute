@@ -16,8 +16,7 @@ def trace_input():
     destination = input("Enter a destination (URL/IP): ")
 
     # define qualifications for destination input
-    #url_pattern = r"((https?:\/\/[\w+-_]+.)|([\w+-_]+.)){1}([\wñÑ+-_]+.{1}[\w+]{2,10})"
-    url_pattern = r"((((https?:\/\/\((w{3}.))?|((w{3}\.)?))([a-zA-Z]+[0,9])*\.)|([a-zA-Z]+[0,9])*\.)(([a-zA-Z]{2,3})+)((.{1})[a-zA-Z]{2})?"
+    url_pattern = r"((https?\:\/\/)?((?:www\.))?)[a-zA-Z]+[0-9]*\.([a-zA-Z]{2,3})((?:\.[a-zA-Z]{2}))?"
     ip_pattern = r"(^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$)"
     
     # check validitiy of input destination
