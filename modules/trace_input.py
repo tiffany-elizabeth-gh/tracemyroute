@@ -1,7 +1,7 @@
 import re
 
 
-def trace_input():
+def validate_trace_ip(destination):
 
     # variables needed to begin a trace
     destination = ""
@@ -22,17 +22,28 @@ def trace_input():
     # check validitiy of input destination
     if destination != "":
         if re.match(url_pattern, destination):
-            print("Valid URL")
+            return True, "Valid URL"
         elif re.match(ip_pattern, destination):
-            print("Valid IP")
+            return True, "Valid IP"
         else:
-            print("Invalid input. Please enter a valid URL or IP address.")
+            return False, "Invalid input. Please enter a valid URL or IP address."
     else:
-        print("Invalid input. Please enter a valid URL or IP address.")
+        return False, "Invalid input. Please enter a valid URL or IP address."
     
-    return destination
 
-trace = trace_input()
+while True:
+    destination = input("Enter a destination (URL/IP): ")
+    result, err_str = validate_trace_ip(destination)
+
+    if result == False:
+        print(err_str, "try again!")
+    else:
+        break
+
+
+
+if __name__ == "__main__":
+    validate_trace_ip("")
 
 # Will eventually bring source_address() in trace_input() 
 # because it makes more sense for them to be in the same code
