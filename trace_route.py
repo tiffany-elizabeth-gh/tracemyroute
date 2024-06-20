@@ -10,14 +10,14 @@ import time
 from scapy.all import *
 import argparse
 
-from source_address import source_ip
-from dest_address import destination
+from source_address import source_address
+from dest_address import dest_address
 
 
 def trace_route(destination, source, max_hops=50, timeout=2):
     
-    # defining variabls
-    timeout = 2
+    # defining variables
+    #timeout = 2 # CH this is giv a s default arg!
     port = 33434
     ttl = 1
     ICMP = socket.getprotobyname('icmp')
@@ -81,24 +81,9 @@ def trace_route(destination, source, max_hops=50, timeout=2):
 
 
 if __name__ == "__main__":
-    trace_route("")
+    trace_route("google.com", "129.184.2.1", max_hops=50, timeout=2)
 
 
 # placed the parsing function here for now
 # needed for parsing through the traceroute details of a packet
 # could be necessary for populating map with hop details
-
-def main_parse():
-    parser = argparse.ArgumentParser(description="Traceroute implementation in Python.")
-    parser.add_argument("destination", help="Destination host or IP address.")
-    parser.add_argument("source", help="Source IP address.")
-    parser.add_argument("-m", "--max-hops", type=int, default=50, help="Maximum number of hops (default: 50).")
-    parser.add_argument("-t", "--timeout", type=int, default=2, help="Timeout for each packet in seconds (default: 2).") # this may need future troubleshooting if this is too low
-
-    args = parser.parse_args()
-
-    print(f"Traceroute to {args.destination} (max hops: {args.max_hops}, timeout: {args.timeout} seconds):")
-    trace_route(args.destination, args.source, max_hops=args.max_hops, timeout=args.timeout)
-
-if __name__ == "__main__":
-    main_parse()
