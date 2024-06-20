@@ -6,7 +6,7 @@
 import re
 
 
-def source_address():
+def source_address(source_ip):
 
     # variables needed
     source_ip = input("Enter the source IP address (leave blank for default): ")
@@ -26,4 +26,7 @@ def source_address():
         print(f"Default source: {source_ip} is being used.") # printing source_ip for error checking
         return source_ip
 
-source = source_address()
+#source = source_address()
+
+if __name__ == "__main__":
+    source_address("")
