@@ -18,7 +18,7 @@ import os
 
 def dest_address(destination, max_hops=50, timeout=2):
 
-    destination = input("Enter a destination (URL/IP): ")
+    #destination = input("Enter a destination (URL/IP): ") # destination is given by argument, no need to input()!
 
     # for converting a host to an ip
     destination_ip = socket.gethostbyname(destination)
@@ -32,7 +32,7 @@ def dest_address(destination, max_hops=50, timeout=2):
     url_pattern = r"((https?\:\/\/)?((?:www\.))?)[a-zA-Z]+[0-9]*\.([a-zA-Z]{2,3})((?:\.[a-zA-Z]{2}))?"
     ip_pattern = r"(^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$)"
     
-    # check validitiy of input destination
+    # check validity of input destination
     if destination != "":
         if re.match(url_pattern, destination):
             destination = destination_ip
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
 def dest_address(destination):
 
-    destination = input("Enter a destination (URL/IP): ")
+    #destination = input("Enter a destination (URL/IP): ")
 
     # port, ttl, and max_hops defaults
     max_hops = 50
@@ -117,5 +117,5 @@ def dest_address(destination):
         print("Invalid input. Please enter a valid URL or IP address.")
 
 if __name__ == "__main__":
-    dest_address("")
+    dest_address("www.google.com")  # hardcode some to be validated destination here
 

@@ -9,7 +9,7 @@ import re
 def source_address(source_ip):
 
     # variables needed
-    source_ip = input("Enter the source IP address (leave blank for default): ")
+    #source_ip = input("Enter the source IP address (leave blank for default): ")
     ip_pattern = r"(^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$)"  # pattern for IP address
 
 
@@ -19,6 +19,7 @@ def source_address(source_ip):
             return source_ip
         else:
             print("Invalid source IP address. Please enter a valid IP address.")
+            return #????
     else:
         # source ip is hardcoded for set up purposes
         # FUTURE add code to retrieve default source address rather than hardcode
@@ -29,4 +30,4 @@ def source_address(source_ip):
 #source = source_address()
 
 if __name__ == "__main__":
-    source_address("")
+    source_address("192.168.0.1") # hardcode some to be validated source here
