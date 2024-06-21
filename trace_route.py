@@ -1,89 +1,80 @@
-# beginning to build the full trace_route module
-# at this point this is where I am making notes 
-# as I'm building the other elements so as not to forget
 
 
 import re
-import socket
-import struct
+import socket 
 import time
-from scapy.all import *
-import argparse
+import os
 
 from source_address import source_address
 from dest_address import dest_address
 
 
-def trace_route(destination, source, max_hops=50, timeout=2):
+def trace_route(destination, max_hops=10, timeout=2):
     
     # defining variables
-    #timeout = 2 # CH this is giv a s default arg!
     port = 33434
     ttl = 1
-    ICMP = socket.getprotobyname('icmp')
-    UDP = socket.getprotobyname('udp')
 
-    # creating socket objects
-    icmp_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, ICMP)
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, UDP)
+    # a list to store hop results
+    hop_results = []
 
-    timeout_struct = struct.pack('ll', timeout, 0)
-    icmp_socket.bind(("", port)) # binds the ICMP protocol to the port
-    icmp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVTIMEO, timeout_struct)
+    while ttl <= max_hops:
+        # creating a socket (UDP) for each TTL
+        open_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+        # setting the TTL
+        open_sock.setsockopt(socket.SOL_IP, socket.IP_TTL, ttl)
 
-    # defining the destination host
-    destination_ip = socket.gethostbyname(destination) # NOTE this is for a url NOT an IP
+        # set valid IP address
+        destination_ip = socket.gethostbyname(destination)
 
-    # for troubleshooting
-    print(f"Tracerouting...{destination}({destination_ip})")
+        # send packet to the destination with current TTL
+        open_sock.sendto(b'', (destination_ip, port))
 
-    while True:
-        # creating the UDP packet
-        udp_socket.setsockopt(socket.SOL_IP, socket.IP_TTL, ttl)
-        udp_socket.sendto(b'', (destination_ip, port))
-        
-        # setting start time
+        # get the current time
         start_time = time.time()
-        no_tries = 3
-        
-        # defining Bool
-        success = False
-        done = False
 
-        #
-        while no_tries > 0:
-            try:
-                # receiving the ICMP packet
-                packet, addr = icmp_socket.recvfrom(512)
-                success = True
-            except socket.error:
-                no_tries -= 1
-                continue
-            if addr[0] == destination_ip:
-                done = True
-                break
-        if success:
-            end_time = time.time()
-            try:
-                name = socket.gethostbyaddr(addr[0])[0]
-            except: pass
-            t = round((end_time - start_time) * 1000, 4)
-            print(f"TTL: {ttl} Addr: {name} ({addr[0]}) Time: {t}ms")
-        else:
-            print(f"TTL: {ttl} * * *")
-        
-        if done:
-            break
+        # receive response (if any)
+        open_sock.settimeout(1) # set timeout to 1 second
+        try:
+            response = open_sock.recvfrom(1024)
+            if response:
+                end_time = time.time()
+                rtt = end_time - start_time
+                ip_address = response[1][0]
+            else:
+                rtt = None
+                ip_address = None
+        except socket.timeout:
+            rtt = None
+            ip_address = None
+            print("Timeout: no response from destination")
+
+        # add results to hops_results list
+        hop_results.append((ttl, ip_address, rtt))
+
+        # close the socket
+        open_sock.close()
+
+        # increment ttl for next probe
         ttl += 1
-    
-    print("Traceroute completed.")
+
+        # if destination is reached, stop
+        if ip_address == destination:
+            break
+
+    return hop_results
 
 
 if __name__ == "__main__":
-    trace_route("google.com", "129.184.2.1", max_hops=50, timeout=2)
-
-
-# placed the parsing function here for now
-# needed for parsing through the traceroute details of a packet
-# could be necessary for populating map with hop details
+    dest_result = dest_address("www.iastate.edu")
+    if dest_result[0]:
+        destination = dest_result[1]
+        if socket.inet_aton(destination):
+            results = trace_route(destination)
+            for hop, ip_address, rtt in results:
+                print(f"Hop {hop}: {ip_address}")
+        else:
+            print("Invalid destination IP address:", destination)
+    else:
+        print("Error resolving destination IP address:", dest_result[1])
