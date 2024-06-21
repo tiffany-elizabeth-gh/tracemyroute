@@ -37,8 +37,6 @@ def source_address(source_ip):
 
 #source = source_address()
 
-if __name__ == "__main__":
-    source_address("")
 
 # defining and validating the destination address
 def validate_trace_ip(destination):
@@ -79,10 +77,6 @@ while True:
     else:
         break
 
-
-
-if __name__ == "__main__":
-    validate_trace_ip("")
 
 # running a traceroute with the validated destination address
 def trace_route(destination_ip, source_ip, max_hops=50, timeout=2):
@@ -147,7 +141,3 @@ def trace_route(destination_ip, source_ip, max_hops=50, timeout=2):
         ttl += 1
     
     print("Traceroute completed.")
-
-
-if __name__ == "__main__":
-    trace_route("")
