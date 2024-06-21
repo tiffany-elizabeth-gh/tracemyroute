@@ -20,10 +20,12 @@ def dest_address(destination):
         if re.match(url_pattern, destination):
             #convert url to IP
             destination = socket.gethostbyname(destination)
-            return True, f"Destination IP is {destination}"
+            #print(f"Destination IP is {destination}"")
+            return True, destination
         # if destination is not a URL, check if it is an IP address
         elif re.match(ip_pattern, destination):
-            return True, f"Valid IP {destination}"
+            #print(f"Destination IP is {destination}")
+            return True, destination
         else:
             return False, "Invalid input. Please enter a valid URL or IP address."
     # not a valid URL or IP address
