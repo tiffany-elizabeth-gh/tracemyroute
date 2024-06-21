@@ -33,3 +33,17 @@ def dest_address(destination):
 if __name__ == "__main__":
     result, message = dest_address("www.google.com")
     print(message)
+
+
+# call to action to work with manually inputted destination
+
+#if __name__ == "__main__":
+
+    #while True:
+        #destination = input("Enter a destination (URL/IP): ")
+        #result, err_str = validate_trace_ip(destination)
+
+        #if result == False:
+            #print(err_str, "try again!")
+        #else:
+            #break
