@@ -19,7 +19,7 @@ def trace_route(destination):
     return hop_list
 
 if __name__ == "__main__":
-    print(trace_route("www.walmart.com"))
+    trace_route("www.walmart.com")
 
 
 # debugging is showing minimal errors but still having trouble with the output
