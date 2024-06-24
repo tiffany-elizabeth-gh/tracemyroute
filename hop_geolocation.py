@@ -1,1 +1,0 @@
-def hop_geolocation(): 
