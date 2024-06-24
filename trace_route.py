@@ -9,7 +9,7 @@ import geoip2.database
 
 
 
-def trace_route(destination, max_hops=10):
+def trace_route(destination, max_hops=30):
 
     # get destination ip
     destination_ip = socket.gethostbyname(destination)
@@ -57,11 +57,13 @@ def trace_route(destination, max_hops=10):
     return hop_list
 
 if __name__ == "__main__":
-    print(trace_route("www.walmart.com"))
+    print(trace_route("www.airbnb.com"))
 
 
 
-# first IP address in hop_list.append is the destination address
-# source IP address is not placed in hop_list (except for maybe being hop_list[1])
+# hop_list[0] is the "header" details
+# hop_list[1] is the destination address
+# source IP address is not placed in hop_list (except for MAYBE being hop_list[2])
+# need to account for geolocations with city only and no coordinates
 
 # OPTIONAL: add code for blocked countries
