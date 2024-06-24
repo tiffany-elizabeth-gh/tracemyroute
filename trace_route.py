@@ -53,13 +53,15 @@ def trace_route(destination, max_hops=10):
         if hop_count == max_hops+1:
             print("Max hops reached before destination was reached")
             break
-    return f"Traceroute performed on {destination}"
+    print(f"Traceroute performed on {destination}") # for testing purposes
+    return hop_list
 
 if __name__ == "__main__":
     print(trace_route("www.walmart.com"))
 
 
-# need to input code for error messages: unreachable host
-# need to input code for max_hops reached
 
-# first IP address in hop_list.append is the destination address - needs to be addressed for future
+# first IP address in hop_list.append is the destination address
+# source IP address is not placed in hop_list (except for maybe being hop_list[1])
+
+# OPTIONAL: add code for blocked countries
