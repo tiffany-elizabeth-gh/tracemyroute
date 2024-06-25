@@ -41,15 +41,18 @@ def trace_route(destination, max_hops=30):
             continue
 
         hop = output.split()
+        hop_count += 1
 
         # error handling for unresponsive hops
         if hop[1] == "*":
+            hop_list.append({"hop": hop_count, "ip address": "* * *"})
+            hop_count += 1
             max_hops -= 1
             if max_hops == 0:
                 print("Max hops reached")
                 break
         else:
-            max_hops = 8
+            #max_hops = 8 # unnecessary at the moment
 
             # reviewing hop details
             for i, output in enumerate(hop):
@@ -58,7 +61,6 @@ def trace_route(destination, max_hops=30):
                     IP = IP[1].split(")")
                     IP = IP[0]
                     hop_details = handler.getDetails(IP)
-                    hop_list.append(hop_details)
 
                     # pulling out specific details
                     for i in enumerate(hop_details.all.items()):
@@ -81,8 +83,21 @@ def trace_route(destination, max_hops=30):
                             long = i[1][1]
                             print("longitude:", long)
 
-    
+                    hop_list.append({"hop": hop_count, 
+                                    "ip address": IP, 
+                                    "hostname": hostname, 
+                                    "city": city, 
+                                    "region": region,
+                                    "country": country,
+                                    "latitude": lat,
+                                    "longitude":long})
+
+        hop_count += 1
+
+
     return f"Final destination ({destination}) reached: {destination_ip}"
+
+
 
 if __name__ == "__main__":
     print(trace_route("www.airbnb.com"))
