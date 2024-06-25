@@ -3,11 +3,10 @@
 
 import subprocess
 import socket
-import requests
-from ip2geotools.databases.noncommercial import DbIpCity
-import geoip2.database
+import ipinfo
 
-
+access_token = input("enter ipinfo.io access token: ")
+handler = ipinfo.getHandler(access_token)
 
 def trace_route(destination, max_hops=30):
 
@@ -24,46 +23,73 @@ def trace_route(destination, max_hops=30):
     hop_list = []
 
     # define traceroute
-    traceroute = subprocess.Popen(["traceroute", destination], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+                                  stdout=subprocess.PIPE, 
+                                  stderr=subprocess.STDOUT,
+                                  text=True)
+    first_line = True
 
+    
+    while True:
+        # get output from traceroute
+        output = traceroute.stdout.readline()
+        if not output:
+            break # no more output
+        print(output.strip())
+        if first_line:
+            first_line = False
+            continue
 
-    # identifying ip address for each hop en route to destination
-    for line in iter(traceroute.stdout.readline, b""):
-        line = line.decode("utf-8")
-        IP_line = line.split(" ")
-        if len(IP_line) > 1:
-            for i, line in enumerate(IP_line):
-                if line.startswith("("):
-                    IP = next((line for line in IP_line if line.startswith("(")))
-                    IP = IP.split("(")
-                    if len(IP) > 1:
-                        IP = IP[1].split(")")
-                        IP = IP[0]
-                        geo = DbIpCity.get(IP, api_key="free")
-                        geolocation = (geo.city, geo.region, geo.country)
-                        coordinates = (geo.latitude, geo.longitude)
-                        hop_list.append({"hop": hop_count, "ip address": IP, "geolocation": geolocation, "coordinates": coordinates})
-                        hop_count = hop_count + 1
-                        print(hop_count, IP, geolocation)
-                        break
-            else:
-                hop_list.append({"hop": hop_count, "ip address": "* * *", "geolocation": "N/A", "coordinates": "N/A"})
-                hop_count = hop_count + 1
-                print(hop_count, "* * *")
-        if hop_count == max_hops+1:
-            print("Max hops reached before destination was reached")
-            break
-    print(f"Traceroute performed on {destination}") # for testing purposes
-    return hop_list
+        hop = output.split()
+
+        # error handling for unresponsive hops
+        if hop[1] == "*":
+            max_hops -= 1
+            if max_hops == 0:
+                print("Max hops reached")
+                break
+        else:
+            max_hops = 8
+
+            # reviewing hop details
+            for i, output in enumerate(hop):
+                if output.startswith("("):
+                    IP = output.split("(")
+                    IP = IP[1].split(")")
+                    IP = IP[0]
+                    hop_details = handler.getDetails(IP)
+                    hop_list.append(hop_details)
+
+                    # pulling out specific details
+                    for i in enumerate(hop_details.all.items()):
+                        if i[1][0] == "hostname":
+                            hostname = i[1][1]
+                            print("hostname:", hostname)
+                        elif i[1][0] == "country":
+                            country = i[1][1]
+                            print("country:", country)
+                        elif i[1][0] == "city":
+                            city = i[1][1]
+                            print("city:", city)
+                        elif i[1][0] == "region":
+                            region = i[1][1]
+                            print("region:", region)
+                        elif i[1][0] == "latitude":
+                            lat = i[1][1]
+                            print("latitude:", lat)
+                        elif i[1][0] == "longitude":
+                            long = i[1][1]
+                            print("longitude:", long)
+
+    
+    return f"Final destination ({destination}) reached: {destination_ip}"
 
 if __name__ == "__main__":
     print(trace_route("www.airbnb.com"))
 
 
 
-# hop_list[0] is the "header" details
-# hop_list[1] is the destination address
-# source IP address is not placed in hop_list (except for MAYBE being hop_list[2])
-# need to account for geolocations with city only and no coordinates
+# did not implement max_hops + hop_count feature here yet
+# source IP address has not been handled here
 
 # OPTIONAL: add code for blocked countries
