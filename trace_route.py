@@ -41,19 +41,16 @@ def trace_route(destination, max_hops=30):
             continue
 
         hop = output.split()
-        hop_count += 1
+        hop_count = hop_count + 1
 
         # error handling for unresponsive hops
-        if hop[1] == "*":
+        if output.endswith("*\n"):
             hop_list.append({"hop": hop_count, "ip address": "* * *"})
-            hop_count += 1
             max_hops -= 1
             if max_hops == 0:
                 print("Max hops reached")
                 break
-        else:
-            #max_hops = 8 # unnecessary at the moment
-
+        else: 
             # reviewing hop details
             for i, output in enumerate(hop):
                 if output.startswith("("):
@@ -91,11 +88,11 @@ def trace_route(destination, max_hops=30):
                                     "country": country,
                                     "latitude": lat,
                                     "longitude":long})
+        
 
-        hop_count += 1
-
-
-    return f"Final destination ({destination}) reached: {destination_ip}"
+    print(f"Final destination ({destination}) reached: {destination_ip}")
+    
+    return hop_list
 
 
 
@@ -104,6 +101,7 @@ if __name__ == "__main__":
 
 
 
+# hop count is off..
 # did not implement max_hops + hop_count feature here yet
 # source IP address has not been handled here
 
