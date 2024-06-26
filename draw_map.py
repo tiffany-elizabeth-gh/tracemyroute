@@ -8,8 +8,7 @@ following the route from source to destination'''
 
 import trace_route
 import folium
-import geocoder
-from geopy.geocoders import Nominatim
+import webbrowser
 
 def draw_map():
 
@@ -28,34 +27,22 @@ def draw_map():
         #tiles= "Mapbox Control Room",
     )
 
-    # DbIPcity is not pulling lat/long, so here is code for city/state/country conversion
-    # code to convert city, state, country to latitude/longitude
-    def get_lat_long(city, state, country):
-        geolocator = Nominatim(user_agent="geoapiExercises")
-        location = geolocator.geocode(f"{city}, {state}, {country}")
-        return location.latitude, location.longitude
-
 
     # add markers for each hop to the map
-    for hop in hop_list: # how do you call hops in the hop_list from traceroute? Do I need to create a database or can I work off the list?
+    for hop in hop_list:
         hop = hop_list[1]
 
         # define text at each marker
-        text = "IP Addr " + str(hop["ip address"]) + "Location " + str(hop["geolocation"])
+        text = (f"'IP Addr:' + {str(hop["ip address"])}\n"
+                f"'Location:' + {str(hop["city"])} + {str(hop["region"])} + {str(hop["country"])}\n"
+                f"'Lat/Long:' + {str(hop["latitude"])} + {str(hop["longitude"])}")
 
         # setting up an if loop to identify hops with IP/Geo info
-        if hop["ip address"] != "* * *" and hop["geolocation"] != None:
-
-            # get the city, state, country from the hop
-            #hop_geo = hop["geolocation"]
-            hop_city, hop_state, hop_country = hop["geolocation"]
-
-            # getting latitude and longitude from hop_geo
-            lat, long = get_lat_long(hop_city, hop_state, hop_country)
+        if hop["ip address"] != "* * *":
 
             # plot map
             folium.CircleMarker(
-                location= [lat, long],
+                location= [hop["latitude"], hop["longitude"]],
                 radius= 5, # circle size
                 popup= text, # popup text window for each hop
                 color= "#00FFFF", # cyan/aqua
@@ -63,10 +50,13 @@ def draw_map():
                 fill= True, # fill marker with fill_color
                 fill_color = "#00FFFF", # fill color set same as outline color - OPT. differentiate colors based on open/close countries
                 fill_opacity= 0.9, #90% opacity = 10% transparency
-            ).add_to(map)
+                ).add_to(map)
 
-    #map.save("traceroutemap.html") # save as html file, for future display
-    map
+    # to view map
+    map.save("traceroutemap.html") # save as html file, for future display
+    webbrowser.open("traceroutemap.html") # open html file in browser
+
+    return map
 
 if __name__ == "__main__":
     print(draw_map())
