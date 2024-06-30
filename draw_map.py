@@ -55,8 +55,8 @@ def draw_map():
             print(hop)
 
     # to view map
-    map.save("traceroutemap_test.html") # save as html file, for future display
-    webbrowser.open("traceroutemap_test.html") # open html file in browser
+    map.save("templates/traceroutemap_test.html") # save as html file, for future display
+    webbrowser.open("templates/traceroutemap_test.html") # open html file in browser
 
     return map
 
