@@ -9,6 +9,7 @@ following the route from source to destination'''
 import trace_route
 import folium
 import webbrowser
+from folium.plugins import MarkerCluster
 
 def draw_map():
 
@@ -27,6 +28,7 @@ def draw_map():
         tiles= "cartodb positron",
     )
 
+    marker_cluster = MarkerCluster().add_to(map)
 
     # add markers for each hop to the map
     for hop in hop_list:
@@ -49,7 +51,7 @@ def draw_map():
                 fill= True, # fill marker with fill_color
                 fill_color = "#00FFFF", # fill color set same as outline color - OPT. differentiate colors based on open/close countries
                 fill_opacity= 0.9, #90% opacity = 10% transparency
-                ).add_to(map)
+                ).add_to(marker_cluster)
             print(hop)
 
     # to view map
