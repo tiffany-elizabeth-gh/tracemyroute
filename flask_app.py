@@ -4,14 +4,14 @@ hop maps tracing an ip/web search'''
 import requests
 import bs4
 import flask
-from flask import Flask
+from flask import Flask, redirect, url_for, request
 import draw_map
 
 app = Flask(__name__)
 
 @app.route("/")
 def flask_app():
-    '''Function to display the flask app'''
-    return flask.render_template("traceroutemap.html", title="Trace My Route")
+    return "traceroutemap.html"
 
-app.run(debug=False, port=8080)
+if __name__ == "__main__":
+    app.run()
