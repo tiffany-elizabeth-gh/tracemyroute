@@ -15,7 +15,7 @@
             data: {destination: destination},
          }).done(function(response) {
             $.ajax({
-               url: "/map",
+               url: "/traceroutemap_test",
                type: "GET",
                success: function(html) {
                   $("#map").append(html);
@@ -26,13 +26,17 @@
    </script>
 
    <body>
-      <p>
-         Enter destination<br><br>
-         Destination<input type="text" id="destination" name="destination">
-   <br><br>
-         <button id="clicked" onclick="draw_map()">Start Trace</button>
-   </p>
-   <div id="map" class="map" style="width: 1000px; height: 1000px;"></div>
+      <form method="POST" action="/tracemyroute">
+         <div class="container" style="border: 2px soid; max-width: 500px; padding: 20px;">
+            <div class="row mb-3">
+               <div class="col-2"><b>Enter Destination:</b></div>
+               <div class="col-10"><input type="text" id="destination" name="destination" 
+                  placeholder="Enter destination" style="width: 100%;"></div>
+            </div>
+            <div class="row mb-3">
+               <div class="col-2"><button id="clicked" onclick="draw_map()">Start Trace</button></div>
+            </div>
+         </div>
    
-</body>
+   </body>
 </html>
