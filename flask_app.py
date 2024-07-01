@@ -97,8 +97,8 @@ def display_map():
             
             # make a basemap, starting point
             map = folium.Map(
-                location=[34.05, 118.24], #lat/long Los Angeles, CA
-                zoom_start=5, # zoom level
+                location=[40.71, -74.00], #lat/long Los Angeles, CA
+                zoom_start=3, # zoom level
                 tiles= "cartodb positron",
             )
 
@@ -133,11 +133,8 @@ def display_map():
             map.save("templates/traceroutemap_test.html")
 
     #return render(request, "traceroutemap_test.html")
-    return "Traceroute complete."
+    return render_template("traceroutemap_test.html", data=map)
 
-@app.route("/map")
-def display_map_html():
-    return render_template("traceroutemap_test.html")
 
 if __name__ == "__main__":
     app.run()
