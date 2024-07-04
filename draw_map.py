@@ -9,6 +9,7 @@ following the route from source to destination'''
 import trace_route
 import folium
 import webbrowser
+from folium.plugins import MarkerCluster
 
 def draw_map():
 
@@ -23,22 +24,22 @@ def draw_map():
     map = folium.Map(
         location=[34.05, 118.24], #lat/long Los Angeles, CA
         zoom_start=5, # zoom level
-        tiles= "CartoDB dark matter",
-        #tiles= "Mapbox Control Room",
+        #tiles= "CartoDB dark matter",
+        tiles= "cartodb positron",
     )
 
+    marker_cluster = MarkerCluster().add_to(map)
 
     # add markers for each hop to the map
     for hop in hop_list:
-        hop = hop_list[1]
 
         # define text at each marker
-        text = (f"'IP Addr:' + {str(hop["ip address"])}\n"
+        text = (f"'IP Addr:' + {str(hop["ip"])}\n"
                 f"'Location:' + {str(hop["city"])} + {str(hop["region"])} + {str(hop["country"])}\n"
                 f"'Lat/Long:' + {str(hop["latitude"])} + {str(hop["longitude"])}")
 
         # setting up an if loop to identify hops with IP/Geo info
-        if hop["ip address"] != "* * *":
+        if hop["ip"] != "* * *" and hop["latitude"] != "N/A":
 
             # plot map
             folium.CircleMarker(
@@ -50,11 +51,12 @@ def draw_map():
                 fill= True, # fill marker with fill_color
                 fill_color = "#00FFFF", # fill color set same as outline color - OPT. differentiate colors based on open/close countries
                 fill_opacity= 0.9, #90% opacity = 10% transparency
-                ).add_to(map)
+                ).add_to(marker_cluster)
+            print(hop)
 
     # to view map
-    map.save("traceroutemap.html") # save as html file, for future display
-    webbrowser.open("traceroutemap.html") # open html file in browser
+    map.save("templates/traceroutemap_test.html") # save as html file, for future display
+    webbrowser.open("templates/traceroutemap_test.html") # open html file in browser
 
     return map
 

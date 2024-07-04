@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_61ab502126cb4a7f347fca396af7baee {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_61ab502126cb4a7f347fca396af7baee" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_61ab502126cb4a7f347fca396af7baee = L.map(
+                "map_61ab502126cb4a7f347fca396af7baee",
+                {
+                    center: [40.71, -74.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 3,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_658c7d9cc684f9dac19406ff5feb41de = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 20, "maxZoom": 20, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abcd", "tms": false}
+            );
+        
+    
+            tile_layer_658c7d9cc684f9dac19406ff5feb41de.addTo(map_61ab502126cb4a7f347fca396af7baee);
+        
+    
+            var marker_cluster_d9fb42dfbf0d68a705f4932ccd088993 = L.markerClusterGroup(
+                {}
+            );
+        
+    
+            var circle_marker_81eea76b84f227e96e4da52220f3c9f1 = L.circleMarker(
+                [34.2846, -119.2222],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_f72e7c1c89768cda0edb5446f4c7b30c = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_359c7762452f582a608183f72bdacde8 = $(`<div id="html_359c7762452f582a608183f72bdacde8" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 142.254.183.41 'Location:' + Ventura + California + US 'Lat/Long:' + 34.2846 + -119.2222</div>`)[0];
+                popup_f72e7c1c89768cda0edb5446f4c7b30c.setContent(html_359c7762452f582a608183f72bdacde8);
+            
+        
+
+        circle_marker_81eea76b84f227e96e4da52220f3c9f1.bindPopup(popup_f72e7c1c89768cda0edb5446f4c7b30c)
+        ;
+
+        
+    
+    
+            var circle_marker_5c951e1c6285819f40128ad7ea3f40dc = L.circleMarker(
+                [34.2846, -119.2222],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_b01886893a875e5a3aeef7bfca24bbcb = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_a5ed1e7c08b7d7a0fecd93c6be9e8251 = $(`<div id="html_a5ed1e7c08b7d7a0fecd93c6be9e8251" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 76.167.29.205 'Location:' + Ventura + California + US 'Lat/Long:' + 34.2846 + -119.2222</div>`)[0];
+                popup_b01886893a875e5a3aeef7bfca24bbcb.setContent(html_a5ed1e7c08b7d7a0fecd93c6be9e8251);
+            
+        
+
+        circle_marker_5c951e1c6285819f40128ad7ea3f40dc.bindPopup(popup_b01886893a875e5a3aeef7bfca24bbcb)
+        ;
+
+        
+    
+    
+            var circle_marker_c9635f83810533c9417b72ee5d361283 = L.circleMarker(
+                [34.2846, -119.2222],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_3bb15852652856c8ade496381c5f7468 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_84a0cb8912b7b15737ff3db888e3514e = $(`<div id="html_84a0cb8912b7b15737ff3db888e3514e" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 72.129.14.92 'Location:' + Ventura + California + US 'Lat/Long:' + 34.2846 + -119.2222</div>`)[0];
+                popup_3bb15852652856c8ade496381c5f7468.setContent(html_84a0cb8912b7b15737ff3db888e3514e);
+            
+        
+
+        circle_marker_c9635f83810533c9417b72ee5d361283.bindPopup(popup_3bb15852652856c8ade496381c5f7468)
+        ;
+
+        
+    
+    
+            var circle_marker_06c3147441f9e3c27c2bca71c5a31897 = L.circleMarker(
+                [34.0522, -118.2437],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_a656fbf498e599c87988c4c6e8b560a6 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_bc4825ec3039515ca461f9cc210b3392 = $(`<div id="html_bc4825ec3039515ca461f9cc210b3392" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 72.129.13.2 'Location:' + Los Angeles + California + US 'Lat/Long:' + 34.0522 + -118.2437</div>`)[0];
+                popup_a656fbf498e599c87988c4c6e8b560a6.setContent(html_bc4825ec3039515ca461f9cc210b3392);
+            
+        
+
+        circle_marker_06c3147441f9e3c27c2bca71c5a31897.bindPopup(popup_a656fbf498e599c87988c4c6e8b560a6)
+        ;
+
+        
+    
+    
+            var circle_marker_1b56581eb30293ab05bd9fc2c5da8ffe = L.circleMarker(
+                [33.7458, -117.8262],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_db295f07befcd587c40342863c84afba = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_2b410cab0364ee13a9eb73cdaa052719 = $(`<div id="html_2b410cab0364ee13a9eb73cdaa052719" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 66.109.6.64 'Location:' + Tustin + California + US 'Lat/Long:' + 33.7458 + -117.8262</div>`)[0];
+                popup_db295f07befcd587c40342863c84afba.setContent(html_2b410cab0364ee13a9eb73cdaa052719);
+            
+        
+
+        circle_marker_1b56581eb30293ab05bd9fc2c5da8ffe.bindPopup(popup_db295f07befcd587c40342863c84afba)
+        ;
+
+        
+    
+    
+            var circle_marker_d563e289b4ad1534b594e73df1baa7c3 = L.circleMarker(
+                [34.0522, -118.2437],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_ba3a10886759138970915f7a7f5ebb94 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_3595b92401ec63e8cbfe5e7d07b7e0b7 = $(`<div id="html_3595b92401ec63e8cbfe5e7d07b7e0b7" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 66.109.3.232 'Location:' + Los Angeles + California + US 'Lat/Long:' + 34.0522 + -118.2437</div>`)[0];
+                popup_ba3a10886759138970915f7a7f5ebb94.setContent(html_3595b92401ec63e8cbfe5e7d07b7e0b7);
+            
+        
+
+        circle_marker_d563e289b4ad1534b594e73df1baa7c3.bindPopup(popup_ba3a10886759138970915f7a7f5ebb94)
+        ;
+
+        
+    
+    
+            var circle_marker_49ea0409477749a8e0f091432aa353fa = L.circleMarker(
+                [32.7831, -96.8067],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_af48ca56c1d86f46a62b8278de2681a1 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_5dec406e9a7f97dacb485ecba170c5e4 = $(`<div id="html_5dec406e9a7f97dacb485ecba170c5e4" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 66.109.5.229 'Location:' + Dallas + Texas + US 'Lat/Long:' + 32.7831 + -96.8067</div>`)[0];
+                popup_af48ca56c1d86f46a62b8278de2681a1.setContent(html_5dec406e9a7f97dacb485ecba170c5e4);
+            
+        
+
+        circle_marker_49ea0409477749a8e0f091432aa353fa.bindPopup(popup_af48ca56c1d86f46a62b8278de2681a1)
+        ;
+
+        
+    
+    
+            var circle_marker_6abead1d54e838f2dfee7e3c99975a48 = L.circleMarker(
+                [32.7831, -96.8067],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_776680567aceee5cd4ed5f309cd0dbd1 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_10c1140483722cb07f70a0834308ae62 = $(`<div id="html_10c1140483722cb07f70a0834308ae62" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 66.109.6.1 'Location:' + Dallas + Texas + US 'Lat/Long:' + 32.7831 + -96.8067</div>`)[0];
+                popup_776680567aceee5cd4ed5f309cd0dbd1.setContent(html_10c1140483722cb07f70a0834308ae62);
+            
+        
+
+        circle_marker_6abead1d54e838f2dfee7e3c99975a48.bindPopup(popup_776680567aceee5cd4ed5f309cd0dbd1)
+        ;
+
+        
+    
+    
+            var circle_marker_e214048dd69d04463a0435dbb6a6338a = L.circleMarker(
+                [41.85, -87.65],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_23b9a85374144922650587b3fad95d24 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_0ad2f24209a946246f7bf9897edb908e = $(`<div id="html_0ad2f24209a946246f7bf9897edb908e" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 107.14.19.192 'Location:' + Chicago + Illinois + US 'Lat/Long:' + 41.8500 + -87.6500</div>`)[0];
+                popup_23b9a85374144922650587b3fad95d24.setContent(html_0ad2f24209a946246f7bf9897edb908e);
+            
+        
+
+        circle_marker_e214048dd69d04463a0435dbb6a6338a.bindPopup(popup_23b9a85374144922650587b3fad95d24)
+        ;
+
+        
+    
+    
+            var circle_marker_c2b77220be823d62007e8304cb1ca0b0 = L.circleMarker(
+                [41.85, -87.65],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_271fed26345eaebcb73d3602386e7fbc = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_e6f2ab621f29d7442deb2f7f7cb0cc96 = $(`<div id="html_e6f2ab621f29d7442deb2f7f7cb0cc96" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 107.14.19.197 'Location:' + Chicago + Illinois + US 'Lat/Long:' + 41.8500 + -87.6500</div>`)[0];
+                popup_271fed26345eaebcb73d3602386e7fbc.setContent(html_e6f2ab621f29d7442deb2f7f7cb0cc96);
+            
+        
+
+        circle_marker_c2b77220be823d62007e8304cb1ca0b0.bindPopup(popup_271fed26345eaebcb73d3602386e7fbc)
+        ;
+
+        
+    
+    
+            var circle_marker_4065252a56f87699fc77b58c71079bd8 = L.circleMarker(
+                [41.85, -87.65],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_4b0b5e804f69661ddd19b391bc654749 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_fce42eb8cc1348e3701caef3693bcf07 = $(`<div id="html_fce42eb8cc1348e3701caef3693bcf07" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 66.109.6.118 'Location:' + Chicago + Illinois + US 'Lat/Long:' + 41.8500 + -87.6500</div>`)[0];
+                popup_4b0b5e804f69661ddd19b391bc654749.setContent(html_fce42eb8cc1348e3701caef3693bcf07);
+            
+        
+
+        circle_marker_4065252a56f87699fc77b58c71079bd8.bindPopup(popup_4b0b5e804f69661ddd19b391bc654749)
+        ;
+
+        
+    
+    
+            var circle_marker_9ebb66b3751021f4846863c9e0320dda = L.circleMarker(
+                [41.85, -87.65],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_9a46c7e1b0e1667a2478d4516e4775bb = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_257dcaaf230adfa9892b8e1c0914c916 = $(`<div id="html_257dcaaf230adfa9892b8e1c0914c916" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 24.30.201.109 'Location:' + Chicago + Illinois + US 'Lat/Long:' + 41.8500 + -87.6500</div>`)[0];
+                popup_9a46c7e1b0e1667a2478d4516e4775bb.setContent(html_257dcaaf230adfa9892b8e1c0914c916);
+            
+        
+
+        circle_marker_9ebb66b3751021f4846863c9e0320dda.bindPopup(popup_9a46c7e1b0e1667a2478d4516e4775bb)
+        ;
+
+        
+    
+    
+            var circle_marker_2bcba9a3182d7aa9df01152cf0627ef4 = L.circleMarker(
+                [42.0664, -87.9373],
+                {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_d9fb42dfbf0d68a705f4932ccd088993);
+        
+    
+        var popup_862ec8693f8def6d3c2d11855d48e374 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b61c7afb4bfcb8110b821de3a4573564 = $(`<div id="html_b61c7afb4bfcb8110b821de3a4573564" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 23.54.76.142 'Location:' + Mount Prospect + Illinois + US 'Lat/Long:' + 42.0664 + -87.9373</div>`)[0];
+                popup_862ec8693f8def6d3c2d11855d48e374.setContent(html_b61c7afb4bfcb8110b821de3a4573564);
+            
+        
+
+        circle_marker_2bcba9a3182d7aa9df01152cf0627ef4.bindPopup(popup_862ec8693f8def6d3c2d11855d48e374)
+        ;
+
+        
+    
+    
+            marker_cluster_d9fb42dfbf0d68a705f4932ccd088993.addTo(map_61ab502126cb4a7f347fca396af7baee);
+        
+</script>
+</html>     {"bubblingMouseEvents": true, "color": "#00FFFF", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#00FFFF", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_13289bcc9b2894bf770d9a1545b0a645);
+        
+    
+        var popup_3bc28106085f39dd0fb926d5897e5600 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_48728aa82737a77e8d865fe08b53912d = $(`<div id="html_48728aa82737a77e8d865fe08b53912d" style="width: 100.0%; height: 100.0%;">'IP Addr:' + 23.54.76.142 'Location:' + Mount Prospect + Illinois + US 'Lat/Long:' + 42.0664 + -87.9373</div>`)[0];
+                popup_3bc28106085f39dd0fb926d5897e5600.setContent(html_48728aa82737a77e8d865fe08b53912d);
+            
+        
+
+        circle_marker_136971f8a2f3259d6c866b2b4c2f02fb.bindPopup(popup_3bc28106085f39dd0fb926d5897e5600)
+        ;
+
+        
+    
+    
+            marker_cluster_13289bcc9b2894bf770d9a1545b0a645.addTo(map_ad48d135f83c6eea339ab1da9a105454);
+        
+</script>
+</html>

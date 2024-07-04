@@ -35,9 +35,10 @@ def trace_route(destination, max_hops=30):
         output = traceroute.stdout.readline()
         if not output:
             break # no more output
-        print(output.strip())
-        if first_line:
-            first_line = False
+        #print(output.strip())
+        
+        # skip anything starting with traceroute as not hop
+        if output.startswith("traceroute"):
             continue
 
         hop = output.split()
@@ -45,49 +46,37 @@ def trace_route(destination, max_hops=30):
 
         # error handling for unresponsive hops
         if output.endswith("*\n"):
-            hop_list.append({"hop": hop_count, "ip address": "* * *"})
+            hop_list.append({"ip": "* * *", "hostname": "N/A", "country": "N/A", 
+                             "city": "N/A", "region": "N/A", "latitude": "N/A", "longitude": "N/A"})
             max_hops -= 1
             if max_hops == 0:
                 print("Max hops reached")
                 break
         else: 
             # reviewing hop details
-            for i, output in enumerate(hop):
-                if output.startswith("("):
-                    IP = output.split("(")
-                    IP = IP[1].split(")")
-                    IP = IP[0]
-                    hop_details = handler.getDetails(IP)
+            # true hop will be like this:
+            # 1 routera-10-33-148-0.tele.iastate.edu (10.33.149.252) 5.385 ms 3.530 ms 3.521 ms
+            for tok in output.split():
+                if tok.endswith(")"): # find token ending in )
+                    ip = tok[1:-1] # remove ()s
+                    break
+            else:
+                continue 
 
-                    # pulling out specific details
-                    for i in enumerate(hop_details.all.items()):
-                        if i[1][0] == "hostname":
-                            hostname = i[1][1]
-                            print("hostname:", hostname)
-                        elif i[1][0] == "country":
-                            country = i[1][1]
-                            print("country:", country)
-                        elif i[1][0] == "city":
-                            city = i[1][1]
-                            print("city:", city)
-                        elif i[1][0] == "region":
-                            region = i[1][1]
-                            print("region:", region)
-                        elif i[1][0] == "latitude":
-                            lat = i[1][1]
-                            print("latitude:", lat)
-                        elif i[1][0] == "longitude":
-                            long = i[1][1]
-                            print("longitude:", long)
+            #print(ip) # for debugging
 
-                    hop_list.append({"hop": hop_count, 
-                                    "ip address": IP, 
-                                    "hostname": hostname, 
-                                    "city": city, 
-                                    "region": region,
-                                    "country": country,
-                                    "latitude": lat,
-                                    "longitude":long})
+            hop_details = handler.getDetails(ip)
+            #print(hop_details.all) # for debugging
+
+            hop_dict = {}
+            for key in ["ip", "hostname", "country", "city", "region", "latitude", "longitude"]:
+                if key in hop_details.all:
+                    hop_dict[key] = hop_details.all[key]
+                else:
+                    hop_dict[key] = "N/A"
+            print(hop_dict)
+
+            hop_list.append(hop_dict)
         
 
     print(f"Final destination ({destination}) reached: {destination_ip}")
