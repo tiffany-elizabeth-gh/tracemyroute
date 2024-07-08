@@ -15,7 +15,7 @@
             data: {destination: destination},
          }).done(function(response) {
             $.ajax({
-               url: "/traceroutemap_test",
+               url: "/plot_map",
                type: "GET",
                success: function(html) {
                   $("#map").append(html);
@@ -39,6 +39,7 @@
          </div>
 
          <div id="streamcontent"></div>
+
         <!-- 
          <script>
             function appendToDiv(data) {
