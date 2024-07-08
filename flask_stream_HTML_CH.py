@@ -15,6 +15,7 @@ from markupsafe import Markup
 import platform
 from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 import json
+import pandas as pd
 
 app = Flask(__name__)
 app.hop_list = []
@@ -46,6 +47,9 @@ def stream_hop_data(destination):
 
     # print traceroute command
     print(f"running traceroute on {destination} at {destination_ip}")
+
+    # to display on screen
+    yield f"Running traceroute on {destination} at {destination_ip}<br><br>"
 
     # setting initial hop count
     hop_count = 0
@@ -133,7 +137,14 @@ def plot_map():
 
         hop_list = app.hop_list 
         print(hop_list) 
-        # TODO: create your folium map here based on the hops
+
+        # info from csv on cybersecurity risk
+        df = pd.read_csv("Cyber_security.csv")
+
+        # pull political countries
+        political_countries_url = (
+            "http://geojson.xyz/naturalearth-3.3.0/ne_50m_admin_0_countries.geojson"
+        )
 
         # make a basemap, starting point
         map = folium.Map(
@@ -141,6 +152,19 @@ def plot_map():
             zoom_starts=0, # zoom level
             tiles= "cartodb positron"
         )
+
+        # cyber_security risk level overlay
+        folium.Choropleth(
+            geo_data=political_countries_url,
+            data=df,
+            columns=("Country", "CEI"),
+            key_on="feature.properties.name",
+            fill_color="RdYlGn_r",
+            fill_opacity=0.8,
+            line_opacity=0.2,
+            nan_fill_color="white",
+            legend_name="Cyber Security Risk",
+        ).add_to(map) 
 
         marker_cluster = MarkerCluster().add_to(map)
 
@@ -196,7 +220,7 @@ def plot_map():
                     count += 1
                 
 
-                
+        # save map to be called by basic.html        
         map.save("templates/map.html")
 
         # Return the map HTML as a response
