@@ -138,7 +138,7 @@ def plot_map():
         # make a basemap, starting point
         map = folium.Map(
             location=[40.71, -74.00], # lat/long New York, NY
-            zoom_starts=25, # zoom level
+            zoom_starts=0, # zoom level
             tiles= "cartodb positron"
         )
 
@@ -172,13 +172,30 @@ def plot_map():
                     fill_color= "#00FFFF", # set same as color, cyan/aqua
                     fill_opacity= 0.9 # set opacity 90% opacity = 10% transparent
                     ).add_to(marker_cluster)
-            
-        # draw lines between hops
-        if len(valid_hops) > 1:
-            folium.PolyLine(valid_hops,
+                
+                folium.PolyLine(valid_hops,
                             color= "#0000000",
                             weight= 3,
-                            opacity= 0.9).add_to(marker_cluster)
+                            opacity= 0.9).add_to(map)
+
+        # add layer control to map
+        folium.LayerControl().add_to(map)
+
+        # draw lines between hops
+        if len(valid_hops) > 1:
+            # setting count for for loop
+            count = 0
+
+            # for loop to create lines between hops
+            for hops in valid_hops:
+                if count < len(valid_hops) - 1:
+                    folium.PolyLine([valid_hops[count], valid_hops[count + 1]],
+                                    color= "#000000",
+                                    weight= 3,
+                                    opacity= 0.9).add_to(map)
+                    count += 1
+                
+
                 
         map.save("templates/map.html")
 
