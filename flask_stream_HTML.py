@@ -17,6 +17,10 @@ from api_keys import access_token  # must contain this format: access_token = "1
 import json
 import pandas as pd
 
+import source_address
+
+
+
 app = Flask(__name__)
 app.hop_list = []
 
@@ -37,7 +41,7 @@ def display_hop_data():
     # hop_list in it so the /plot_map can access it
     return Response(stream_hop_data(destination), mimetype='text/html')
 
-def stream_hop_data(destination):
+def stream_hop_data(destination, source=False):
 
     # define max_hops
     max_hops = 30
@@ -45,11 +49,14 @@ def stream_hop_data(destination):
     # get destination ip
     destination_ip = socket.gethostbyname(destination)
 
+    # get source ip
+    source_ip = source_address.source_address(source)
+
     # print traceroute command
-    print(f"running traceroute on {destination} at {destination_ip}")
+    print(f"running traceroute on {destination} at {destination_ip} from {source_ip}")
 
     # to display on screen
-    yield f"Running traceroute on {destination} at {destination_ip}<br><br>"
+    yield f"Running traceroute on {destination} at {destination_ip} from {source_ip}<br><br>"
 
     # setting initial hop count
     hop_count = 0
