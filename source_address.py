@@ -5,6 +5,8 @@ If the source is not entered manually, the default source address will be used.'
 
 
 import re
+import socket
+import requests
 
 
 def source_address(source):
@@ -21,17 +23,14 @@ def source_address(source):
         else:
             return False, f"Invalid source IP address {source}. Please enter a valid IP address or leave blank for default source IP."
     else:
-        # source ip is hardcoded for set up purposes
-        # FUTURE add code to retrieve default source address rather than hardcode
-        source = "8.8.8.8"  # default source IP address
-        return True, f"Source IP is {source}"
+        # code to retrieve user's IP address
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+        print(f"Your Computer IP Address is: {local_ip}")
+
+        return True, f"Source IP is {local_ip}"
 
 if __name__ == "__main__":
     result, message = source_address("192.168.0.1")
     print(message)
 
-
-# Future thoughts:
-# Every computer has its own IP address and in order to run a traceroute from the individuals unique
-# IP address, that IP address will need to be brought into this code
-# For now, we have it hardcoded in
