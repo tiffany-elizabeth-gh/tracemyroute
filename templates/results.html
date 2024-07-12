@@ -1,0 +1,37 @@
+<!-- Create a new HTML page for the results, e.g., results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trace My Route Results</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    #map-container {
+      width: 80%;
+      float: left;
+      height: 500px;
+      border: 1px solid #000000;
+      padding: 10px;
+    }
+    #results-container {
+      width: 50%;
+      float: left;
+      height: 200px;
+      border: 1px solid #000000;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map-and-results-container">
+    <div id="map-container">
+      {% include "map.html" %}
+    </div>
+    <div id="results-container">
+      {{  data  }}
+    </div>
+  </div>
+
+</body>
+</html>
