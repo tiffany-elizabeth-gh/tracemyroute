@@ -28,7 +28,8 @@ handler = ipinfo.getHandler(access_token)
 
 @app.route("/")
 def start_trace():
-    return flask.render_template('basic_HTML_stream.html') # has added div for streaming hop data
+    #return flask.render_template('basic_HTML_stream.html')
+    return flask.render_template('basic_HTML_stream.html')
 
 @app.route("/tracemyroute", methods=["POST"])
 def display_hop_data():
@@ -231,7 +232,17 @@ def plot_map():
         map.save("templates/map.html")
 
         # Return the map HTML as a response
-        return render_template("map.html", data=map)
+        #return render_template("map.html", data=map)
+
+        # set up for redirect to results page
+        data = stream_hop_data
+        return redirect(url_for('results', data=data))
+    
+@app.route("/results")
+def results():
+    # render the results page template
+    data = request.args.get('data')
+    return render_template("results.html", data=data)
 
 
 
