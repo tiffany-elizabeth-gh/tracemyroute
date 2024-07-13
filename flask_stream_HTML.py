@@ -11,6 +11,7 @@ from folium.plugins import MarkerCluster
 import requests
 import flask
 from flask import Flask, redirect, url_for, request, render_template, jsonify, send_file, Response, session
+from cachelib.simple import SimpleCache
 from markupsafe import Markup
 import platform
 from api_keys import access_token  # must contain this format: access_token = "1234567890" 
@@ -24,10 +25,13 @@ import source_address
 app = Flask(__name__)
 app.hop_list = []
 
+cache = SimpleCache()
+
 handler = ipinfo.getHandler(access_token)
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def start_trace():
+    '''Starts the trace and returns the map'''
     #return flask.render_template('basic_HTML_stream.html')
     return flask.render_template('basic_HTML_stream.html')
 
@@ -125,6 +129,7 @@ def stream_hop_data(destination, source=False):
 
             # create a string to HTML print
             hop_str = str(hop_dict)[1:-1].replace("'", "")
+
 
             # Yield an HTML string
             yield f"{hop_count}: {hop_str}<br>" # will "print" hop data via this: Response(stream_hop_data(), mimetype='text/html')
@@ -231,20 +236,27 @@ def plot_map():
         # save map to be called by basic.html        
         map.save("templates/map.html")
 
-        # Return the map HTML as a response
-        #return render_template("map.html", data=map)
+        # storing results in a cache
+        #cache.set('results', app.hop_list)
 
-        # set up for redirect to results page
-        data = stream_hop_data
-        return redirect(url_for('results', data=data))
+        return redirect(url_for('results'))
     
 @app.route("/results")
 def results():
     # render the results page template
-    data = request.args.get('data')
-    return render_template("results.html", data=data)
+    return render_template("results.html", tracemyroute_output=app.hop_list)
 
+@app.route("/restart", methods=["POST"])
+def restart_trace():
+    # clear the cache
+    cache.delete('results')
+    # clear the hop list
+    app.hop_list = []
+    # clear the valid hops
+    app.valid_hops = []
 
+    return redirect("/")
+    
 
 
 if __name__ == "__main__":
