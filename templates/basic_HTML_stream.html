@@ -4,25 +4,65 @@
    <meta charset="UTF-8">
    <title>Trace My Route</title>
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+   <style>
+      #form-container  {
+         padding: 20px;
+         width: fit-content;
+         height: fit-content;
+         background-color: #76e470;
+         border: 1px solid #76e470;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+         text-align: center;
+         margin: 0 auto;
+         position: absolute;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+      }
+      #form-input {
+         padding: 20px;
+         text-align: center;
+         padding-bottom: 20px;
+      }
+      #row  {
+         padding-bottom: 20px;
+      }
+      #form-button {
+         padding: 20px;
+         color: #fff;
+         cursor: pointer;
+         }
+   </style>
 </head>
 
 
 <body>
+   <div id="form-container">
     <form method="POST" action="/tracemyroute">
-       <div class="container" style="border: 2px soid; max-width: 500px; padding: 20px;">
-          <div class="row mb-3">
-             <div class="col-2"><b>Enter Destination:</b></div>
-             <div class="col-10"><input type="text" id="destination" name="destination" 
-                placeholder="Enter destination" style="width: 100%;"></div>
-                <div class="col-2"><b>Enter Source IP (leave blank for default):</b></div>
+      <div class="row"><h1>Welcome to Trace My Route</h1>
+         <p>Begin by entering your destination and optional starting source</p>
+      </div>
+         <div id="form-input">
+            <div class="row">
+               <div class="col-2"><b>Enter Destination:</b></div>
+                <div class="col-10"><input type="text" id="destination" name="destination" 
+                  placeholder="Enter destination" style="width: 75%;" class="form-input"></div>
+               </div>
+            </div>
+            <div class="row">
+                <div class="col-2"><b>Enter Source IP:</b></div>
                 <div class="col-10"><input type="text" id="source" name="source" 
-                   placeholder="Enter source" style="width: 100%;"></div>
-          </div>
-          <div class="row mb-3">
-             <div class="col-2"><button id="clicked" onclick="draw_map()">Start Trace</button></div>
-          </div>
-       </div>
-       </form>
+                   placeholder="Leave blank for default" style="width: 75%;" class="form-input"></div>
+            </div>
+            <div id="form-button">
+               <div class="row">
+                  <div class="col-10"><button id="clicked" onclick="draw_map()" class="form-button">Start Trace</button></div>
+               </div>
+            </div>
+         </div>
+   </form>
+   </div>
 
     <div id="streamcontent"></div>
 
