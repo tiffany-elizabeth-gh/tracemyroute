@@ -14,11 +14,19 @@
       padding: 10px;
     }
     #results-container {
-      width: 50%;
+      overflow-y: auto;
+      width: 80%;
       float: left;
-      height: 200px;
+      max-height: 200px;
       border: 1px solid #000000;
       padding: 10px;
+    }
+    #results-container ol {
+      padding: 10px;
+      margin: 10px;
+    }
+    #results-container li {
+      padding: 5px;
     }
   </style>
 </head>
@@ -29,9 +37,35 @@
       {% include "map.html" %}
     </div>
     <div id="results-container">
-      {{  data  }}
+      <h2>Traceroute Results</h2>
+      <ol>
+        {% for hop in tracemyroute_output %}
+          <li>
+            {% for key, value in hop.items()  %}
+              {{ key }}={{ value }}{% if not loop.las %}, {% endif %}
+            {% endfor %}
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-4">
+      <h2>New Trace?</h2>
+        <button id="clicked" onclick="start_trace()">New Trace</button>
     </div>
   </div>
 
+  <script>
+    function start_trace()  {
+      $.ajax({
+        url: "/restart",
+        type: "POST",
+        success: function() {
+          window.location.href = "/"
+        }
+      })
+    }
+  </script>
 </body>
 </html>
