@@ -28,6 +28,18 @@
     #results-container li {
       padding: 5px;
     }
+    #begin-again  {
+      position: absolute;
+      margin-right: 1%;
+      margin-left: 1%;
+      right: 0;
+      width: 18%;
+      height: 500px;
+      border: 1px solid #76e470;
+      background-color: #76e470;
+      padding: 20px;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -49,11 +61,10 @@
       </ol>
     </div>
   </div>
-  <div class="row mb-3">
-    <div class="col-4">
-      <h2>New Trace?</h2>
+  <div id="begin-again">
+    <h2>New Trace?</h2>
+      <p>To start a new trace click the button below</p>
         <button id="clicked" onclick="start_trace()">New Trace</button>
-    </div>
   </div>
 
   <script>
