@@ -1,0 +1,8 @@
+flask==3.0.3
+folium==0.16.0
+ipinfo==5.0.1
+requests==2.32.3
+markupsafe==2.1.5
+pandas=2.2.2
+cachelib==0.13.0
+
