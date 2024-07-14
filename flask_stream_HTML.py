@@ -303,9 +303,9 @@ def restart_trace():
     # clear the cache
     cache.delete('results')
     # clear the hop list
-    app.hop_list = []
+    app.config["hop_list"] = []
     # clear the valid hops
-    app.valid_hops = []
+    app.config["valid_hops"] = []
 
     return redirect("/")
     
