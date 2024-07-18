@@ -21,8 +21,8 @@ import os
 import source_address
 
 
-# deactivate for web platform
-from api_keys import access_token  # must contain this format: access_token = "1234567890" 
+# ACTIVATE for internal configuration
+#from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 
 
 
