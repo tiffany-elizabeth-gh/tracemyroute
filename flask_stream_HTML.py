@@ -237,9 +237,9 @@ def plot_map():
         for hop in hop_list:
 
             # define text at each marker
-            text = (f"'IP Addr:' + {str(hop["ip"])}\n"
-                    f"'Location:' + {str(hop["city"])} + {str(hop["region"])} + {str(hop["country"])}\n"
-                    f"'Lat/Long:' + {str(hop["latitude"])} + {str(hop["longitude"])}")
+            text = (f"'IP Addr:' + {str(hop['ip'])}\n"
+                    f"'Location:' + {str(hop['city'])} + {str(hop['region'])} + {str(hop['country'])}\n"
+                    f"'Lat/Long:' + {str(hop['latitude'])} + {str(hop['longitude'])}")
 
             # setting up an if loop to identify hops with IP/Geo info
             if hop["ip"] != "* * *" and hop["latitude"] != "N/A":
