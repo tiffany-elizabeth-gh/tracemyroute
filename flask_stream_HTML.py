@@ -14,12 +14,16 @@ from flask import Flask, redirect, url_for, request, render_template, jsonify, s
 from cachelib.simple import SimpleCache
 from markupsafe import Markup
 import platform
-#from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 import json
 import pandas as pd
 import os
 
 import source_address
+
+
+# deactivate for web platform
+from api_keys import access_token  # must contain this format: access_token = "1234567890" 
+
 
 
 
@@ -29,7 +33,11 @@ app = Flask(__name__)
 cache = SimpleCache()
 
 # setting up the access token for API handling
+
+# ACTIVATE for internal configuration use
 #handler = ipinfo.getHandler(access_token)
+
+# ACTIVATE for web platform use
 # for grabbing access_token from Render environment
 handler = os.environ.get('access_token')
 
@@ -49,9 +57,8 @@ def display_hop_data():
         destination = request.form.get("destination")
         if not destination:
             return "Please enter a destination.", 400
+    
     # this will loop through the hop data and print it to the HTML page via yield
-    # for that we need the destination and session data to store the global 
-    # hop_list in it so the /plot_map can access it
     return Response(stream_hop_data(destination), mimetype='text/html')
 
 def stream_hop_data(destination, source=False):
@@ -88,14 +95,16 @@ def stream_hop_data(destination, source=False):
                                     stderr=subprocess.STDOUT,
                                     text=True)
     else:
-        traceroute = subprocess.Popen(["traceroute", "-s", source_ip, "-w", "10", destination], 
-                                    stdout=subprocess.PIPE, 
-                                    stderr=subprocess.STDOUT,
-                                    text=True)
-        #traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+        # adding "--src" allows for source ip to be editable for certain OS systems
+        # tends to add more trouble than possibly worth
+        #traceroute = subprocess.Popen(["traceroute", "--src", source_ip, "-w", "10", destination], 
                                     #stdout=subprocess.PIPE, 
                                     #stderr=subprocess.STDOUT,
                                     #text=True)
+        traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.STDOUT,
+                                    text=True)
 
     first_line = True
 
@@ -165,8 +174,6 @@ def get_lat_long_center(hop_list):
     lat_rng = [-99999, 99999]
     lon_rng = [-99999, 99999]
 
-    # accounting for error when traceroute results in no hops because 
-    # of user input error or source IP error
     lat_center = 0
     lon_center = 0
 
