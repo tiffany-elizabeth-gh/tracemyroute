@@ -17,6 +17,7 @@ import platform
 #from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 import json
 import pandas as pd
+import os
 
 import source_address
 
@@ -28,7 +29,9 @@ app = Flask(__name__)
 cache = SimpleCache()
 
 # setting up the access token for API handling
-handler = ipinfo.getHandler(access_token)
+#handler = ipinfo.getHandler(access_token)
+# for grabbing access_token from Render environment
+handler = os.environ.get('access_token')
 
 # setting up app.config for global access to map overlay
 app.config["CyberRisk"] = pd.read_csv("Cyber_security.csv")
