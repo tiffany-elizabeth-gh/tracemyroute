@@ -85,10 +85,14 @@ def stream_hop_data(destination, source=False):
                                     stderr=subprocess.STDOUT,
                                     text=True)
     else:
-        traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+        traceroute = subprocess.Popen(["traceroute", "-s", source_ip, "-w", "10", destination], 
                                     stdout=subprocess.PIPE, 
                                     stderr=subprocess.STDOUT,
                                     text=True)
+        #traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+                                    #stdout=subprocess.PIPE, 
+                                    #stderr=subprocess.STDOUT,
+                                    #text=True)
 
     first_line = True
 
@@ -157,6 +161,12 @@ def get_lat_long_center(hop_list):
     lon_sum = 0
     lat_rng = [-99999, 99999]
     lon_rng = [-99999, 99999]
+
+    # accounting for error when traceroute results in no hops because 
+    # of user input error or source IP error
+    lat_center = 0
+    lon_center = 0
+
     for hop in hop_list:
         if hop["latitude"] != "N/A":
             lat_sum += float(hop["latitude"])
@@ -168,8 +178,8 @@ def get_lat_long_center(hop_list):
             lon_rng[0] = max(float(hop["longitude"]), lon_rng[0])
             lon_rng[1] = min(float(hop["longitude"]), lon_rng[1])
 
-    lat_center = lat_sum / count
-    lon_center = lon_sum / count
+            lat_center = lat_sum / count
+            lon_center = lon_sum / count
 
     # get distance of half of diagonal of bounding box
     lat_dist = lat_rng[0] - lat_rng[1]
@@ -294,6 +304,10 @@ def plot_map():
 def results():
     # pull hop_list
     hop_list = app.config["hop_list"]
+
+    # to account for no hops
+    if len(hop_list) == 0:
+        return render_template("error.html", error_message="Hops cannot be determined. Check your source IP address.")
 
     # render the results page template
     return render_template("results.html", tracemyroute_output=hop_list)
