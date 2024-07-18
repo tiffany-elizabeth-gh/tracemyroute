@@ -6,3 +6,4 @@ markupsafe==2.1.5
 pandas==2.2.2
 cachelib==0.13.0
 numpy==1.23.2
+gunicorn==22.0.0
