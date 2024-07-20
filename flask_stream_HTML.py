@@ -213,9 +213,9 @@ def get_lat_long_center(hop_list):
 
     return lat_center, lon_center, zoom_start        
 
-@app.route('/plot_map', methods=["GET", "POST"])
+@app.route('/plot_map', methods=["POST"])
 def plot_map():
-    if request.method == "GET" or request.method == "POST":
+    if request.method == "POST":
 
         hop_list = app.config["hop_list"] 
         #print(hop_list) # used for debugging
@@ -308,11 +308,12 @@ def plot_map():
         # save map to be called by basic.html        
         map.save("templates/map.html")
 
-        # storing results in a cache
-        #cache.set('results', app.hop_list)
+        return redirect(url_for('results', reload_map=True))
 
-        return redirect(url_for('results'))
-    
+@app.route('/map.html')
+def map_html():
+    return send_file('templates/map.html')
+
 @app.route("/results")
 def results():
     # pull hop_list
@@ -334,7 +335,7 @@ def restart_trace():
     # clear the valid hops
     app.config["valid_hops"] = []
     # clear map.html
-    #os.remove("templates/map.html")
+    #cache.delete('map.html')
 
     # pulling destination from form input
     destination = request.form.get("destination")
