@@ -41,7 +41,7 @@
    <div id="form-container">
     <form method="POST" action="/tracemyroute">
       <div class="row"><h1>Welcome to Trace My Route</h1>
-         <p>Begin by entering your destination and optional starting source</p>
+         <p>Begin by entering your destination</p>
       </div>
          <div id="form-input">
             <div class="row">
@@ -76,8 +76,8 @@
             url: "/tracemyroute",
             type: "POST",
             data: {destination: destination},
-         }).done(function(response) {
-            window.location.href = "/results";
+         }).done(function(response)  {
+            window.location.href= "/results";
          });
       }
     </script>
