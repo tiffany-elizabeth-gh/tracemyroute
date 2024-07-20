@@ -10,7 +10,7 @@ import webbrowser
 from folium.plugins import MarkerCluster
 import requests
 import flask
-from flask import Flask, redirect, url_for, request, render_template, jsonify, send_file, Response, session
+from flask import Flask, redirect, url_for, request, render_template, jsonify, send_file, Response, session, stream_with_context
 from cachelib.simple import SimpleCache
 from markupsafe import Markup
 import platform
@@ -22,7 +22,7 @@ import source_address
 
 
 # ACTIVATE for internal configuration
-#from api_keys import access_token  # must contain this format: access_token = "1234567890" 
+from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 
 
 
@@ -35,11 +35,11 @@ cache = SimpleCache()
 # setting up the access token for API handling
 
 # ACTIVATE for internal configuration use
-#handler = ipinfo.getHandler(access_token)
+handler = ipinfo.getHandler(access_token)
 
 # ACTIVATE for web platform use
 # for grabbing access_token from Render environment
-handler = os.environ.get('access_token')
+#handler = os.environ.get('access_token')
 
 # setting up app.config for global access to map overlay
 app.config["CyberRisk"] = pd.read_csv("Cyber_security.csv")
@@ -158,7 +158,8 @@ def stream_hop_data(destination, source=False):
 
 
             # Yield an HTML string
-            yield f"{hop_count}: {hop_str}<br>" # will "print" hop data via this: Response(stream_hop_data(), mimetype='text/html')
+            # will "print" hop data via this: Response(stream_hop_data(), mimetype='text/html')
+            yield f"{hop_count}: {hop_str}<br>"
 
 
     # At then end return a button that jumps to /plot map and uses hop_list to plot the map
@@ -259,9 +260,9 @@ def plot_map():
         for hop in hop_list:
 
             # define text at each marker
-            text = (f"'IP Addr:' + {str(hop['ip'])}\n"
-                    f"'Location:' + {str(hop['city'])} + {str(hop['region'])} + {str(hop['country'])}\n"
-                    f"'Lat/Long:' + {str(hop['latitude'])} + {str(hop['longitude'])}")
+            text = (f"{str(hop['ip'])}\n"
+                    f"{str(hop['city'])} + {str(hop['region'])} + {str(hop['country'])}\n"
+                    f"{str(hop['latitude'])} + {str(hop['longitude'])}")
 
             # setting up an if loop to identify hops with IP/Geo info
             if hop["ip"] != "* * *" and hop["latitude"] != "N/A":
@@ -332,8 +333,13 @@ def restart_trace():
     app.config["hop_list"] = []
     # clear the valid hops
     app.config["valid_hops"] = []
+    # clear map.html
+    #os.remove("templates/map.html")
 
-    return redirect("/")
+    # pulling destination from form input
+    destination = request.form.get("destination")
+
+    return Response(stream_hop_data(destination), mimetype='text/html')
     
 
 
