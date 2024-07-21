@@ -89,7 +89,11 @@ def stream_hop_data(destination, source=False):
 
     # define traceroute
     if platform.system() == "Windows":
-        traceroute = subprocess.Popen(["tracert", "-w", "10", destination], 
+        #traceroute = subprocess.Popen(["tracert", "-w", "10", destination], 
+                                    #stdout=subprocess.PIPE, 
+                                    #stderr=subprocess.STDOUT,
+                                    #text=True)
+        traceroute = subprocess.run(["tracert", "-w", "10", destination], 
                                     stdout=subprocess.PIPE, 
                                     stderr=subprocess.STDOUT,
                                     text=True)
@@ -101,7 +105,11 @@ def stream_hop_data(destination, source=False):
                                     #stdout=subprocess.PIPE, 
                                     #stderr=subprocess.STDOUT,
                                     #text=True)
-        traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+        #traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+                                    #stdout=subprocess.PIPE, 
+                                    #stderr=subprocess.STDOUT,
+                                    #text=True)
+        traceroute = subprocess.run(["traceroute", "-w", "10", destination], 
                                     stdout=subprocess.PIPE, 
                                     stderr=subprocess.STDOUT,
                                     text=True)
