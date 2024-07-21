@@ -24,7 +24,7 @@ import dest_address
 
 
 # ACTIVATE for internal configuration
-from api_keys import access_token  # must contain this format: access_token = "1234567890" 
+#from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 
 
 
@@ -37,15 +37,14 @@ cache = SimpleCache()
 # setting up the access token for API handling
 
 # ACTIVATE for internal configuration use
-handler = ipinfo.getHandler(access_token)
+#handler = ipinfo.getHandler(access_token)
 
 # ACTIVATE for web platform use
 # for grabbing access_token from Render environment
-#handler = os.environ.get('access_token')
+handler = os.environ.get('access_token')
 
 # setting up app.config for global access to map overlay
 app.config["CyberRisk"] = pd.read_csv("Cyber_security.csv")
-
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -168,9 +167,6 @@ def stream_hop_data(destination, source=False):
             </form>'''
 
     yield html
-
-    
-
 
 def get_lat_long_center(hop_list):
     lat_sum = 0
