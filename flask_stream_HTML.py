@@ -19,6 +19,7 @@ import pandas as pd
 import os
 
 import source_address
+import dest_address
 
 
 # ACTIVATE for internal configuration
@@ -55,11 +56,13 @@ def start_trace():
 def display_hop_data():
     if request.method == "POST":
         destination = request.form.get("destination")
-        if not destination:
-            return "Please enter a destination.", 400
-    
-    # this will loop through the hop data and print it to the HTML page via yield
-    return Response(stream_hop_data(destination), mimetype='text/html')
+
+        # validate destination ip
+        result, message = dest_address.dest_address(destination)
+        if result == False:
+            return redirect(url_for("error", error_message=message))
+        else:
+            return Response(stream_hop_data(destination), mimetype="text/html")
 
 def stream_hop_data(destination, source=False):
 
@@ -67,11 +70,7 @@ def stream_hop_data(destination, source=False):
     max_hops = 30
 
     # get destination ip
-    try:
-        destination_ip = socket.gethostbyname(destination)
-    # error handling to return to home page if destination is invalid
-    except socket.gaierror:
-        return f"Destination IP {destination} not found"
+    destination_ip = socket.gethostbyname(destination)
 
     # get source ip
     source_ip = source_address.source_address(source)
@@ -168,6 +167,8 @@ def stream_hop_data(destination, source=False):
             </form>'''
 
     yield html
+
+    
 
 
 def get_lat_long_center(hop_list):
@@ -321,10 +322,11 @@ def results():
 
     # to account for no hops
     if len(hop_list) == 0:
-        return render_template("error.html", error_message="Hops cannot be determined. Check your source IP address.")
+        #return render_template("error.html", error_message="Hops cannot be determined. Check your source IP address.")
+        return redirect(url_for('error', error_message="Hops cannot be determined."))
 
     # render the results page template
-    return render_template("results.html", tracemyroute_output=hop_list)
+    return render_template("results.html", tracemyroute_output=hop_list, map="map.html")
 
 @app.route("/restart", methods=["POST"])
 def restart_trace():
@@ -342,7 +344,9 @@ def restart_trace():
 
     return Response(stream_hop_data(destination), mimetype='text/html')
     
-
+@app.route("/error/<error_message>")
+def error(error_message):
+    return render_template("error.html", error_message=error_message)
 
 if __name__ == "__main__":
     app.run()
