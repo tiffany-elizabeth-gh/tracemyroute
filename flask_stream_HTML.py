@@ -17,6 +17,7 @@ import platform
 import json
 import pandas as pd
 import os
+import datetime
 
 import source_address
 import dest_address
@@ -306,17 +307,19 @@ def plot_map():
                     count += 1
                 
 
-        # save map to be called by basic.html        
-        map.save("templates/map.html")
+        # save map to be called by results.html with unique version
+        timestamp = int(datetime.datetime.now().timestamp())       
+        map.save(f"templates/map_{timestamp}.html")
 
-        return redirect(url_for('results', reload_map=True))
+        # delete any previous version of map.html
+        if os.path.exists(f"templates/map_{timestamp - 1}.html"):
+            os.remove(f"templates/map_{timestamp - 1}.html")
 
-@app.route('/map.html')
-def map_html():
-    return send_file('templates/map.html')
+        #return redirect(url_for('results', reload_map=True))
+        return redirect(url_for('results', map=f"map_{timestamp}.html"))
 
-@app.route("/results")
-def results():
+@app.route("/results/<map>")
+def results(map):
     # pull hop_list
     hop_list = app.config["hop_list"]
 
@@ -325,8 +328,8 @@ def results():
         #return render_template("error.html", error_message="Hops cannot be determined. Check your source IP address.")
         return redirect(url_for('error', error_message="Hops cannot be determined."))
 
-    # render the results page template
-    return render_template("results.html", tracemyroute_output=hop_list, map="map.html")
+    # render the results page template#
+    return render_template("results.html", tracemyroute_output=hop_list, map=map)
 
 @app.route("/restart", methods=["POST"])
 def restart_trace():
