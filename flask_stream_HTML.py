@@ -26,9 +26,7 @@ import dest_address
 # ACTIVATE for internal configuration
 from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 
-
-
-
+# setting up the environment
 app = Flask(__name__)
 
 # setting up the global space for cache
@@ -47,6 +45,7 @@ handler = ipinfo.getHandler(access_token)
 app.config["CyberRisk"] = pd.read_csv("Cyber_security.csv")
 
 
+# beginning code
 @app.route("/", methods=["GET", "POST"])
 def start_trace():
     '''Starts the trace and returns the map'''
@@ -65,7 +64,6 @@ def display_hop_data():
             return Response(stream_hop_data(destination), mimetype="text/html")
 
 def stream_hop_data(destination, source=False):
-
     # define max_hops
     max_hops = 30
 
@@ -108,10 +106,8 @@ def stream_hop_data(destination, source=False):
                                     #stderr=subprocess.STDOUT,
                                     #text=True)
 
-
     first_line = True
 
-    
     while True:
         # get output from traceroute
         output = traceroute.stdout.readline()
@@ -323,7 +319,6 @@ def results(map):
 
     # to account for no hops
     if len(hop_list) == 0:
-        #return render_template("error.html", error_message="Hops cannot be determined. Check your source IP address.")
         return redirect(url_for('error', error_message="Hops cannot be determined."))
 
     # render the results page template#
@@ -337,8 +332,6 @@ def restart_trace():
     app.config["hop_list"] = []
     # clear the valid hops
     app.config["valid_hops"] = []
-    # clear map.html
-    #cache.delete('map.html')
 
     # pulling destination from form input
     destination = request.form.get("destination")
