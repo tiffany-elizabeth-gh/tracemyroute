@@ -18,6 +18,7 @@ import json
 import pandas as pd
 import os
 import datetime
+import select
 
 import source_address
 import dest_address
@@ -63,9 +64,7 @@ def display_hop_data():
         else:
             return Response(stream_hop_data(destination), mimetype="text/html")
 
-def stream_hop_data(destination, source=False):
-    # define max_hops
-    max_hops = 30
+def stream_hop_data(destination, source=False, timeout=45):
 
     # get destination ip
     destination_ip = socket.gethostbyname(destination)
@@ -85,6 +84,7 @@ def stream_hop_data(destination, source=False):
     # create hop empty hop list for IP addresses as a key in session
     hop_list = app.config["hop_list"] = []
 
+    '''
     # define traceroute
     if platform.system() == "Windows":
         traceroute = subprocess.Popen(["tracert", "-w", "10", destination], 
@@ -105,7 +105,19 @@ def stream_hop_data(destination, source=False):
                                     #stdout=subprocess.PIPE, 
                                     #stderr=subprocess.STDOUT,
                                     #text=True)
-
+    '''
+    # define traceroute with timeout
+    if platform.system() == "Windows":
+        traceroute = subprocess.Popen(["tracert", "-w", "10", destination], 
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.STDOUT,
+                                    text=True)
+    else:
+        traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.STDOUT,
+                                    text=True)
+                                    
     first_line = True
 
     while True:
@@ -125,10 +137,8 @@ def stream_hop_data(destination, source=False):
             hop_list.append({"ip": "* * *", "hostname": "N/A", "country": "N/A", 
                             "city": "N/A", "region": "N/A", "latitude": "N/A", "longitude": "N/A"})
             hop_count += 1
-            max_hops -= 1
-            if max_hops == 0:
-                print("Max hops reached")
-                break
+            yield f"{hop_count}: * * *<br>"
+            
         else: 
             # reviewing hop details
             for tok in output.split():
@@ -157,7 +167,7 @@ def stream_hop_data(destination, source=False):
             # Yield an HTML string
             # will "print" hop data via this: Response(stream_hop_data(), mimetype='text/html')
             yield f"{hop_count}: {hop_str}<br>"
-
+    
 
     # At then end return a button that jumps to /plot map and uses hop_list to plot the map
     html = f'''<form action="/plot_map" method="post">
@@ -204,6 +214,8 @@ def get_lat_long_center(hop_list):
         zoom_start = 4
     if dist <= 600:
         zoom_start = 2
+    if dist <= 1000:
+        zoom_start = 1
     else:
         zoom_start = 4
 
@@ -302,12 +314,14 @@ def plot_map():
                 
 
         # save map to be called by results.html with unique version
-        timestamp = int(datetime.datetime.now().timestamp())       
-        map.save(f"templates/map_{timestamp}.html")
+        timestamp = int(datetime.datetime.now().timestamp())
+        map_file_name = f"templates/map_{timestamp}.html"       
+        map.save(map_file_name)
 
         # delete any previous version of map.html
-        if os.path.exists(f"templates/map_{timestamp - 1}.html"):
-            os.remove(f"templates/map_{timestamp - 1}.html")
+        for file in os.listdir("templates"):
+            if file.startswith("map_") and file != os.path.basename(map_file_name):
+                os.remove(os.path.join("templates", file))
 
         #return redirect(url_for('results', reload_map=True))
         return redirect(url_for('results', map=f"map_{timestamp}.html"))
@@ -336,7 +350,14 @@ def restart_trace():
     # pulling destination from form input
     destination = request.form.get("destination")
 
-    return Response(stream_hop_data(destination), mimetype='text/html')
+    # error handling for invalid inputs
+    result, message = dest_address.dest_address(destination)
+    if result == False:
+        return redirect(url_for("error", error_message=message))
+    else:
+        return Response(stream_hop_data(destination), mimetype="text/html")
+
+    #return Response(stream_hop_data(destination), mimetype='text/html')
     
 @app.route("/error/<error_message>")
 def error(error_message):
