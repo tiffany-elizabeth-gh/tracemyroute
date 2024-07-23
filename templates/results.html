@@ -1,4 +1,3 @@
-<!-- Create a new HTML page for the results, e.g., results.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +45,7 @@
 <body>
   <div id="map-and-results-container">
     <div id="map-container">
-      {% include "map.html" %}
+      {% include map %}
     </div>
     <div id="results-container">
       <h2>Traceroute Results</h2>
@@ -62,21 +61,52 @@
     </div>
   </div>
   <div id="begin-again">
-    <h2>New Trace?</h2>
-      <p>To start a new trace click the button below</p>
-        <button id="clicked" onclick="start_trace()">New Trace</button>
+    <form method="POST" action="/restart">
+      <h2>New Trace?</h2>
+        <div class="col-2">Enter New Trace Destination:</div>
+          <div class="col-10"><input type="text" id="destination" name="destination" 
+            placeholder="Enter destination" style="width: 75%;" class="form-input"></div>
+            <button id="clicked">New Trace</button>
+        </div>
+    </form>
   </div>
 
   <script>
-    function start_trace()  {
+    $.ajaxSetup({
+      cache: false,
+    });
+
+    function draw_map()  {
+      var destination = $("#destination").val();
+      var timestamp = new Date().getTime();
       $.ajax({
         url: "/restart",
         type: "POST",
-        success: function() {
-          window.location.href = "/"
-        }
-      })
+        data: {destination: destination},
+        cache: false,
+      }).done(function(response)  {
+        $.ajax({
+          url: "/plot_map",
+          type: "POST",
+          data: {destination: destination},
+          cache: false,
+        }).done(function(html)  {
+          const element = document.getElementById("map-container");
+          element.innerHTML = map_html;
+          $.ajax({
+            url: "/results",
+            type: "GET",
+            cache: false,
+          }).done(function(html)  {
+            element.innerHTML = html;
+          });
+        });
+      });
     }
+
+    $("#clicked").click(function()  {
+      draw_map();
+    });
   </script>
 </body>
 </html>

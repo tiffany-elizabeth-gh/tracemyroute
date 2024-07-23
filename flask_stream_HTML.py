@@ -10,31 +10,43 @@ import webbrowser
 from folium.plugins import MarkerCluster
 import requests
 import flask
-from flask import Flask, redirect, url_for, request, render_template, jsonify, send_file, Response, session
+from flask import Flask, redirect, url_for, request, render_template, jsonify, send_file, Response, session, stream_with_context
 from cachelib.simple import SimpleCache
 from markupsafe import Markup
 import platform
-from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 import json
 import pandas as pd
+import os
+import datetime
+import select
 
 import source_address
+import dest_address
 
 
+# ACTIVATE for internal configuration
+from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 
+# setting up the environment
 app = Flask(__name__)
 
 # setting up the global space for cache
 cache = SimpleCache()
 
 # setting up the access token for API handling
+
+# ACTIVATE for internal configuration use
 handler = ipinfo.getHandler(access_token)
+
+# ACTIVATE for web platform use
+# for grabbing access_token from Render environment
+#handler = os.environ.get('access_token')
 
 # setting up app.config for global access to map overlay
 app.config["CyberRisk"] = pd.read_csv("Cyber_security.csv")
 
 
-
+# beginning code
 @app.route("/", methods=["GET", "POST"])
 def start_trace():
     '''Starts the trace and returns the map'''
@@ -44,24 +56,18 @@ def start_trace():
 def display_hop_data():
     if request.method == "POST":
         destination = request.form.get("destination")
-        if not destination:
-            return "Please enter a destination.", 400
-    # this will loop through the hop data and print it to the HTML page via yield
-    # for that we need the destination and session data to store the global 
-    # hop_list in it so the /plot_map can access it
-    return Response(stream_hop_data(destination), mimetype='text/html')
 
-def stream_hop_data(destination, source=False):
+        # validate destination ip
+        result, message = dest_address.dest_address(destination)
+        if result == False:
+            return redirect(url_for("error", error_message=message))
+        else:
+            return Response(stream_hop_data(destination), mimetype="text/html")
 
-    # define max_hops
-    max_hops = 30
+def stream_hop_data(destination, source=False, timeout=45):
 
     # get destination ip
-    try:
-        destination_ip = socket.gethostbyname(destination)
-    # error handling to return to home page if destination is invalid
-    except socket.gaierror:
-        return f"Destination IP {destination} not found"
+    destination_ip = socket.gethostbyname(destination)
 
     # get source ip
     source_ip = source_address.source_address(source)
@@ -78,25 +84,42 @@ def stream_hop_data(destination, source=False):
     # create hop empty hop list for IP addresses as a key in session
     hop_list = app.config["hop_list"] = []
 
+    '''
     # define traceroute
     if platform.system() == "Windows":
         traceroute = subprocess.Popen(["tracert", "-w", "10", destination], 
                                     stdout=subprocess.PIPE, 
                                     stderr=subprocess.STDOUT,
                                     text=True)
-    else:
-        traceroute = subprocess.Popen(["traceroute", "-s", source_ip, "-w", "10", destination], 
-                                    stdout=subprocess.PIPE, 
-                                    stderr=subprocess.STDOUT,
-                                    text=True)
-        #traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+        #traceroute = subprocess.run(["tracert", "-w", "10", destination], 
                                     #stdout=subprocess.PIPE, 
                                     #stderr=subprocess.STDOUT,
                                     #text=True)
 
+    else:
+        traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.STDOUT,
+                                    text=True)
+        #traceroute = subprocess.run(["traceroute", "-w", "10", destination], 
+                                    #stdout=subprocess.PIPE, 
+                                    #stderr=subprocess.STDOUT,
+                                    #text=True)
+    '''
+    # define traceroute with timeout
+    if platform.system() == "Windows":
+        traceroute = subprocess.Popen(["tracert", "-w", "10", destination], 
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.STDOUT,
+                                    text=True)
+    else:
+        traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.STDOUT,
+                                    text=True)
+                                    
     first_line = True
 
-    
     while True:
         # get output from traceroute
         output = traceroute.stdout.readline()
@@ -114,10 +137,8 @@ def stream_hop_data(destination, source=False):
             hop_list.append({"ip": "* * *", "hostname": "N/A", "country": "N/A", 
                             "city": "N/A", "region": "N/A", "latitude": "N/A", "longitude": "N/A"})
             hop_count += 1
-            max_hops -= 1
-            if max_hops == 0:
-                print("Max hops reached")
-                break
+            yield f"{hop_count}: * * *<br>"
+            
         else: 
             # reviewing hop details
             for tok in output.split():
@@ -144,8 +165,9 @@ def stream_hop_data(destination, source=False):
 
 
             # Yield an HTML string
-            yield f"{hop_count}: {hop_str}<br>" # will "print" hop data via this: Response(stream_hop_data(), mimetype='text/html')
-
+            # will "print" hop data via this: Response(stream_hop_data(), mimetype='text/html')
+            yield f"{hop_count}: {hop_str}<br>"
+    
 
     # At then end return a button that jumps to /plot map and uses hop_list to plot the map
     html = f'''<form action="/plot_map" method="post">
@@ -154,7 +176,6 @@ def stream_hop_data(destination, source=False):
 
     yield html
 
-
 def get_lat_long_center(hop_list):
     lat_sum = 0
     count = 0
@@ -162,8 +183,6 @@ def get_lat_long_center(hop_list):
     lat_rng = [-99999, 99999]
     lon_rng = [-99999, 99999]
 
-    # accounting for error when traceroute results in no hops because 
-    # of user input error or source IP error
     lat_center = 0
     lon_center = 0
 
@@ -195,14 +214,16 @@ def get_lat_long_center(hop_list):
         zoom_start = 4
     if dist <= 600:
         zoom_start = 2
+    if dist <= 1000:
+        zoom_start = 1
     else:
         zoom_start = 4
 
     return lat_center, lon_center, zoom_start        
 
-@app.route('/plot_map', methods=["GET", "POST"])
+@app.route('/plot_map', methods=["POST"])
 def plot_map():
-    if request.method == "GET" or request.method == "POST":
+    if request.method == "POST":
 
         hop_list = app.config["hop_list"] 
         #print(hop_list) # used for debugging
@@ -247,9 +268,9 @@ def plot_map():
         for hop in hop_list:
 
             # define text at each marker
-            text = (f"'IP Addr:' + {str(hop['ip'])}\n"
-                    f"'Location:' + {str(hop['city'])} + {str(hop['region'])} + {str(hop['country'])}\n"
-                    f"'Lat/Long:' + {str(hop['latitude'])} + {str(hop['longitude'])}")
+            text = (f"{str(hop['ip'])}\n"
+                    f"{str(hop['city'])} + {str(hop['region'])} + {str(hop['country'])}\n"
+                    f"{str(hop['latitude'])} + {str(hop['longitude'])}")
 
             # setting up an if loop to identify hops with IP/Geo info
             if hop["ip"] != "* * *" and hop["latitude"] != "N/A":
@@ -292,25 +313,30 @@ def plot_map():
                     count += 1
                 
 
-        # save map to be called by basic.html        
-        map.save("templates/map.html")
+        # save map to be called by results.html with unique version
+        timestamp = int(datetime.datetime.now().timestamp())
+        map_file_name = f"templates/map_{timestamp}.html"       
+        map.save(map_file_name)
 
-        # storing results in a cache
-        #cache.set('results', app.hop_list)
+        # delete any previous version of map.html
+        for file in os.listdir("templates"):
+            if file.startswith("map_") and file != os.path.basename(map_file_name):
+                os.remove(os.path.join("templates", file))
 
-        return redirect(url_for('results'))
-    
-@app.route("/results")
-def results():
+        #return redirect(url_for('results', reload_map=True))
+        return redirect(url_for('results', map=f"map_{timestamp}.html"))
+
+@app.route("/results/<map>")
+def results(map):
     # pull hop_list
     hop_list = app.config["hop_list"]
 
     # to account for no hops
     if len(hop_list) == 0:
-        return render_template("error.html", error_message="Hops cannot be determined. Check your source IP address.")
+        return redirect(url_for('error', error_message="Hops cannot be determined."))
 
-    # render the results page template
-    return render_template("results.html", tracemyroute_output=hop_list)
+    # render the results page template#
+    return render_template("results.html", tracemyroute_output=hop_list, map=map)
 
 @app.route("/restart", methods=["POST"])
 def restart_trace():
@@ -321,9 +347,21 @@ def restart_trace():
     # clear the valid hops
     app.config["valid_hops"] = []
 
-    return redirect("/")
-    
+    # pulling destination from form input
+    destination = request.form.get("destination")
 
+    # error handling for invalid inputs
+    result, message = dest_address.dest_address(destination)
+    if result == False:
+        return redirect(url_for("error", error_message=message))
+    else:
+        return Response(stream_hop_data(destination), mimetype="text/html")
+
+    #return Response(stream_hop_data(destination), mimetype='text/html')
+    
+@app.route("/error/<error_message>")
+def error(error_message):
+    return render_template("error.html", error_message=error_message)
 
 if __name__ == "__main__":
     app.run()

@@ -41,7 +41,7 @@
    <div id="form-container">
     <form method="POST" action="/tracemyroute">
       <div class="row"><h1>Welcome to Trace My Route</h1>
-         <p>Begin by entering your destination and optional starting source</p>
+         <p>Begin by entering your destination</p>
       </div>
          <div id="form-input">
             <div class="row">
@@ -50,11 +50,13 @@
                   placeholder="Enter destination" style="width: 75%;" class="form-input"></div>
                </div>
             </div>
+            <!-- //
             <div class="row">
                 <div class="col-2"><b>Enter Source IP:</b></div>
                 <div class="col-10"><input type="text" id="source" name="source" 
                    placeholder="Leave blank for default" style="width: 75%;" class="form-input"></div>
-            </div>
+            </div> 
+            // -->
             <div id="form-button">
                <div class="row">
                   <div class="col-10"><button id="clicked" onclick="draw_map()" class="form-button">Start Trace</button></div>
@@ -74,8 +76,8 @@
             url: "/tracemyroute",
             type: "POST",
             data: {destination: destination},
-         }).done(function(response) {
-            window.location.href = "/results";
+         }).done(function(response)  {
+            window.location.href= "/results";
          });
       }
     </script>
