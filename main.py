@@ -50,7 +50,7 @@ app.config["CyberRisk"] = pd.read_csv("Cyber_security.csv")
 @app.route("/", methods=["GET", "POST"])
 def start_trace():
     '''Starts the trace and returns the map'''
-    return flask.render_template('basic_HTML_stream.html')
+    return flask.render_template('begin_tracemyroute.html')
 
 @app.route("/tracemyroute", methods=["POST"])
 def display_hop_data():
@@ -336,7 +336,7 @@ def results(map):
         return redirect(url_for('error', error_message="Hops cannot be determined."))
 
     # render the results page template#
-    return render_template("results.html", tracemyroute_output=hop_list, map=map)
+    return render_template("tracemyroute_results.html", tracemyroute_output=hop_list, map=map)
 
 @app.route("/restart", methods=["POST"])
 def restart_trace():
@@ -361,7 +361,7 @@ def restart_trace():
     
 @app.route("/error/<error_message>")
 def error(error_message):
-    return render_template("error.html", error_message=error_message)
+    return render_template("tracemyroute_error.html", error_message=error_message)
 
 if __name__ == "__main__":
     app.run()
