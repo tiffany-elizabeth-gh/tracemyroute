@@ -1,12 +1,11 @@
 ''' source_address(source) is code to identify the source IP address for the traceroute.
-If the source is entered manually, the IP address is validated. If the manually entered source IP
-address is invalid, corresponding error message will be given.
-If the source is not entered manually, the default source address will be used.'''
+The code includes the ability to validate a manually input IP address matched against an ip_pattern,
+but is not included as a feature for a first release. More debugging has to occur before it is a fully
+working feature. Error handling is included for future features.'''
 
 
 import re
 import socket
-import requests
 
 
 def source_address(source):
@@ -27,7 +26,7 @@ def source_address(source):
         hostname = socket.gethostname()
         local_ip = socket.gethostbyname(hostname)
         source = local_ip
-        print(f"Your Computer IP Address is: {source}")
+        #print(f"Your Computer IP Address is: {source}")    # for debugging
 
         return f"Source IP is {source}"
 
