@@ -1,7 +1,6 @@
 '''Code to build flask app for user access and display of 
 hop maps tracing an ip/web search'''
 
-
 import subprocess
 import socket
 import ipinfo
@@ -18,13 +17,9 @@ import json
 import pandas as pd
 import os
 import datetime
-import select
 
 import source_address
 import dest_address
-
-
-# ACTIVATE for internal configuration
 from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 
 # setting up the environment
@@ -33,12 +28,12 @@ app = Flask(__name__)
 # setting up the global space for cache
 cache = SimpleCache()
 
-# setting up the access token for API handling
+# Access token for API handling
 
-# ACTIVATE for internal configuration use
+# ACTIVATE for INTERNAL CONFIGURATION use
 handler = ipinfo.getHandler(access_token)
 
-# ACTIVATE for web platform use
+# ACTIVATE for WEB PLATFORM use
 # for grabbing access_token from Render environment
 #handler = os.environ.get('access_token')
 
@@ -72,10 +67,8 @@ def stream_hop_data(destination, source=False, timeout=45):
     # get source ip
     source_ip = source_address.source_address(source)
 
-    # print traceroute command
-    print(f"running traceroute on {destination} at {destination_ip} from {source_ip}")
-
-    # to display on screen
+    # display traceroute request
+    #print(f"running traceroute on {destination} at {destination_ip} from {source_ip}")
     yield f"Running traceroute on {destination} at {destination_ip} from {source_ip}<br><br>"
 
     # setting initial hop count
@@ -84,29 +77,7 @@ def stream_hop_data(destination, source=False, timeout=45):
     # create hop empty hop list for IP addresses as a key in session
     hop_list = app.config["hop_list"] = []
 
-    '''
     # define traceroute
-    if platform.system() == "Windows":
-        traceroute = subprocess.Popen(["tracert", "-w", "10", destination], 
-                                    stdout=subprocess.PIPE, 
-                                    stderr=subprocess.STDOUT,
-                                    text=True)
-        #traceroute = subprocess.run(["tracert", "-w", "10", destination], 
-                                    #stdout=subprocess.PIPE, 
-                                    #stderr=subprocess.STDOUT,
-                                    #text=True)
-
-    else:
-        traceroute = subprocess.Popen(["traceroute", "-w", "10", destination], 
-                                    stdout=subprocess.PIPE, 
-                                    stderr=subprocess.STDOUT,
-                                    text=True)
-        #traceroute = subprocess.run(["traceroute", "-w", "10", destination], 
-                                    #stdout=subprocess.PIPE, 
-                                    #stderr=subprocess.STDOUT,
-                                    #text=True)
-    '''
-    # define traceroute with timeout
     if platform.system() == "Windows":
         traceroute = subprocess.Popen(["tracert", "-w", "10", destination], 
                                     stdout=subprocess.PIPE, 
@@ -157,7 +128,7 @@ def stream_hop_data(destination, source=False, timeout=45):
                     hop_dict[key] = hop_details.all[key]
                 else:
                     hop_dict[key] = "N/A"
-            print(hop_dict)
+            #print(hop_dict)    # for debugging
             hop_list.append(hop_dict)
 
             # create a string to HTML print
@@ -268,9 +239,9 @@ def plot_map():
         for hop in hop_list:
 
             # define text at each marker
-            text = (f"{str(hop['ip'])}\n"
-                    f"{str(hop['city'])} + {str(hop['region'])} + {str(hop['country'])}\n"
-                    f"{str(hop['latitude'])} + {str(hop['longitude'])}")
+            text = (f"{str(hop['ip'])}<br>"
+                    f"{str(hop['city'])}, {str(hop['region'])}, {str(hop['country'])}<br>"
+                    f"{str(hop['latitude'])}, {str(hop['longitude'])}")
 
             # setting up an if loop to identify hops with IP/Geo info
             if hop["ip"] != "* * *" and hop["latitude"] != "N/A":
@@ -357,7 +328,6 @@ def restart_trace():
     else:
         return Response(stream_hop_data(destination), mimetype="text/html")
 
-    #return Response(stream_hop_data(destination), mimetype='text/html')
     
 @app.route("/error/<error_message>")
 def error(error_message):
