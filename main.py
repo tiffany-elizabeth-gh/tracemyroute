@@ -29,12 +29,17 @@ import json
 import pandas as pd
 import os
 import datetime
+import sys
 
 # import from root folder
 import source_address
 import dest_address
 from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 
+# adjust mysite to your project root
+os.chdir("tracemyroute")
+
+print("got that far", file=sys.stderr)
 
 # setting up the environment
 app = Flask(__name__)
@@ -76,7 +81,10 @@ def display_hop_data():
         if result == False:
             return redirect(url_for("error", error_message=message))
         else:
-            return Response(stream_hop_data(destination), mimetype="text/html")
+            #return Response(stream_hop_data(destination), mimetype="text/html")
+            response = Response(stream_hop_data(destination), mimetype='text/html')
+            response.headers['X-Accel-Buffering'] = 'no'    # needed for nginx (pythonanywhere)
+            return response
 
 def stream_hop_data(destination, source=False):
     '''Stream hop data. Starting with displaying destination url/IP address and source IP address.
@@ -158,7 +166,7 @@ def stream_hop_data(destination, source=False):
 
             # Yield an HTML string
             # will "print" hop data via this: Response(stream_hop_data(), mimetype='text/html')
-            yield f"{hop_count}: {hop_str}<br>"
+            yield f"{hop_count}: {hop_str}<br>\n"    # for pythonanywhere need a \n at end
     
 
     # At then end return a button that jumps to /plot map and uses hop_list to plot the map
@@ -233,9 +241,12 @@ def plot_map():
         '''If attempting to deploy on web server like pythonanywhere, 
         download this link and remove the URL, directing to the file instead.
         Be sure to update folium.Chloroplet(geo_data= " ") if you switch to a file.'''
-        political_countries_url = (
-            "http://geojson.xyz/naturalearth-3.3.0/ne_50m_admin_0_countries.geojson"
-        )
+        #political_countries_url = (
+            #"http://geojson.xyz/naturalearth-3.3.0/ne_50m_admin_0_countries.geojson"
+        #)
+
+        # Add the GeoJSON data to the map
+        geojson_data = "countries.geojson"
 
         # setting up zoom/base for map
         center_lat, center_lon, zoom_start = get_lat_long_center(hop_list)
@@ -248,8 +259,9 @@ def plot_map():
         )  
 
         # cyber_security risk level overlay
+        # change to geojson_data to political_countries_url if using direct URL
         folium.Choropleth(
-            geo_data=political_countries_url,
+            geo_data=geojson_data,  
             data=df,
             columns=("Country", "CEI"),
             key_on="feature.properties.name",
@@ -316,15 +328,16 @@ def plot_map():
 
         # save map to be called by results.html with unique version
         timestamp = int(datetime.datetime.now().timestamp())
-        map_file_name = f"templates/map_{timestamp}.html"       
+        #map_file_name = f"templates/map_{timestamp}.html"
+        map_file_name = f"tracemyroute/templates/map_{timestamp}.html"  # for pythonanywhere
         map.save(map_file_name)
 
         # delete any previous version of map.html
-        for file in os.listdir("templates"):
+        #for file in os.listdir("templates"):
+        for file in os.listdir("tracemyroute/templates"):    # for pythonanywhere
             if file.startswith("map_") and file != os.path.basename(map_file_name):
                 os.remove(os.path.join("templates", file))
 
-        #return redirect(url_for('results', reload_map=True))
         return redirect(url_for('results', map=f"map_{timestamp}.html"))
 
 @app.route("/results/<map>")
