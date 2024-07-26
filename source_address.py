@@ -9,10 +9,10 @@ import socket
 
 
 def source_address(source):
-
+    '''Identify the source IP address for tracemyroute'''
     # pattern to validate the source IP address
     # only necessary for when source IP address is manually entered
-    ip_pattern = r"(^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$)"
+    ip_pattern = r"(^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$)"   # TODO still needs debugging
 
 
     if source is True:
@@ -22,7 +22,7 @@ def source_address(source):
         else:
             return False, f"Invalid source IP address {source}. Please enter a valid IP address or leave blank for default source IP."
     else:
-        # code to retrieve user's IP address
+        # code to retrieve user's IP address if no source IP is entered
         hostname = socket.gethostname()
         local_ip = socket.gethostbyname(hostname)
         source = local_ip
