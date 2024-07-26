@@ -11,20 +11,24 @@ from urllib import parse
 
 
 def dest_address(destination):
-
+    '''Identify the destination IP address for tracemyroute'''
     # define qualifications for destination input
-    #url_pattern = r"((https?\:\/\/)?((?:www\.))?)[a-zA-Z]+[0-9]*\.([a-zA-Z]{2,3})((?:\.[a-zA-Z]{2}))?"
+    #url_pattern = r"((https?\:\/\/)?((?:www\.))?)[a-zA-Z]+[0-9]*\.([a-zA-Z]{2,3})((?:\.[a-zA-Z]{2}))?" # TODO still needs debugging
     ip_pattern = r"(^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$)"
     
     # check validity of input destination
     if destination is not None:
+        # verify if IP address was entered that it was entered properly
         if re.match(ip_pattern, destination):
              return True, destination
+        # if an IP address was not entered, retrieve IP address based on URL
         else:
             try:
                 socket.gethostbyname(destination)
+            # an error has occured within socket
             except socket.gaierror:
                     return False, "Invalid URL. Try again."
+            # accounting for urls with special characters/structures (i.e. https://, .en, etc.)
             else:
                 dest_split = parse.urlsplit(destination)
                 dest_ip = socket.gethostbyname(dest_split.netloc)
