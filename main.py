@@ -1,6 +1,18 @@
-'''Code to build flask app for user access and display of 
-hop maps tracing an ip/web search'''
+'''
+Start here. 
+The starting place and main landing point for tracemyroute.
+Code is currently ran and displayed using a development server.
+Code includes build flask app for user to access begin_tracemyroute.html. 
+The user input desintation URL is validated through dest_address.py and source address is discovered through source_address.py.
+Hops are streamed to /tracemyroute to show app is working and to track progress.
+Code builds folium map working with json and chloropleth for display features.
+Results are yielded through tracemyroute_results.html.
+Any errors are yielded through tracemyroute_error.html.
 
+Notes are included for running code on a web browser, but requires permissions that have not been debugged.
+'''
+
+# import necessary libraries
 import subprocess
 import socket
 import ipinfo
@@ -18,9 +30,11 @@ import pandas as pd
 import os
 import datetime
 
+# import from root folder
 import source_address
 import dest_address
 from api_keys import access_token  # must contain this format: access_token = "1234567890" 
+
 
 # setting up the environment
 app = Flask(__name__)
@@ -28,14 +42,15 @@ app = Flask(__name__)
 # setting up the global space for cache
 cache = SimpleCache()
 
+
 # Access token for API handling
 
 # ACTIVATE for INTERNAL CONFIGURATION use
 handler = ipinfo.getHandler(access_token)
 
 # ACTIVATE for WEB PLATFORM use
-# for grabbing access_token from Render environment
-#handler = os.environ.get('access_token')
+#handler = os.environ.get('access_token')   # for grabbing access_token from Render environment
+
 
 # setting up app.config for global access to map overlay
 app.config["CyberRisk"] = pd.read_csv("Cyber_security.csv")
@@ -49,7 +64,11 @@ def start_trace():
 
 @app.route("/tracemyroute", methods=["POST"])
 def display_hop_data():
+    '''Displays the hop data, streaming each hop in the browser until traceroute is complete.
+    Includes error handling for invalid destinations.'''
+
     if request.method == "POST":
+        # get destination input from begin_tracemyroute.html form
         destination = request.form.get("destination")
 
         # validate destination ip
@@ -59,7 +78,11 @@ def display_hop_data():
         else:
             return Response(stream_hop_data(destination), mimetype="text/html")
 
-def stream_hop_data(destination, source=False, timeout=45):
+def stream_hop_data(destination, source=False):
+    '''Stream hop data. Starting with displaying destination url/IP address and source IP address.
+    Each hop displays IP address, hostname, city/state/country/post code, latitutde/longitude, if available.
+    If no data is available "* * *" is displayed.
+    Each hop is added to hop_list.'''
 
     # get destination ip
     destination_ip = socket.gethostbyname(destination)
@@ -68,7 +91,7 @@ def stream_hop_data(destination, source=False, timeout=45):
     source_ip = source_address.source_address(source)
 
     # display traceroute request
-    #print(f"running traceroute on {destination} at {destination_ip} from {source_ip}")
+    #print(f"running traceroute on {destination} at {destination_ip} from {source_ip}") # for debugging
     yield f"Running traceroute on {destination} at {destination_ip} from {source_ip}<br><br>"
 
     # setting initial hop count
@@ -100,8 +123,6 @@ def stream_hop_data(destination, source=False, timeout=45):
         # skip anything starting with traceroute as not hop
         if output.startswith("traceroute") or output.startswith("Tracing") or output.startswith("over"):
             continue
-
-        hop = output.split()
 
         # error handling for unresponsive hops
         if output.endswith("*\n"):
@@ -148,6 +169,7 @@ def stream_hop_data(destination, source=False, timeout=45):
     yield html
 
 def get_lat_long_center(hop_list):
+    '''Defines folium map's center based on the hop_list results'''
     lat_sum = 0
     count = 0
     lon_sum = 0
@@ -176,7 +198,7 @@ def get_lat_long_center(hop_list):
     lon_dist = lon_rng[0] - lon_rng[1]
     dist = ((lat_dist**2 + lon_dist**2)**0.5 / 2) * 100 # in km
 
-    # set zoom_start based on hop distances
+    # set zoom_start based on distances between farthest hops
     if dist <= 30:
         zoom_start = 8
     if dist <= 100:
@@ -186,23 +208,31 @@ def get_lat_long_center(hop_list):
     if dist <= 600:
         zoom_start = 2
     if dist <= 1000:
-        zoom_start = 1
+        zoom_start = 0.5
     else:
-        zoom_start = 4
+        zoom_start = 6
 
     return lat_center, lon_center, zoom_start        
 
 @app.route('/plot_map', methods=["POST"])
 def plot_map():
+    '''Based on the hop_list, a map is plotted with markers, 
+    lusters indicating multiple hops in one location, and a line connecting the hops.
+    The map is saved in /templates/ with a timestamp, and if any previous map exists, it is removed.
+    The map is displayed in /results.'''
+
     if request.method == "POST":
 
         hop_list = app.config["hop_list"] 
-        #print(hop_list) # used for debugging
+        #print(hop_list) # for debugging
 
         # info from csv on cybersecurity risk
         df = app.config["CyberRisk"]
 
         # pull political countries
+        '''If attempting to deploy on web server like pythonanywhere, 
+        download this link and remove the URL, directing to the file instead.
+        Be sure to update folium.Chloroplet(geo_data= " ") if you switch to a file.'''
         political_countries_url = (
             "http://geojson.xyz/naturalearth-3.3.0/ne_50m_admin_0_countries.geojson"
         )
@@ -299,6 +329,9 @@ def plot_map():
 
 @app.route("/results/<map>")
 def results(map):
+    '''Display final traceroute hop list, folium map, and an option to begin tracemyroute again.
+    tracemyroute_results.html is called'''
+
     # pull hop_list
     hop_list = app.config["hop_list"]
 
@@ -311,6 +344,10 @@ def results(map):
 
 @app.route("/restart", methods=["POST"])
 def restart_trace():
+    '''When the user decide to start trace again, this code is called to delete cache, 
+    delete any current values in hop_list and valid_hops, and a new destination is grabbed from the html form.
+    The code then displays new hop data in an html stream.'''
+
     # clear the cache
     cache.delete('results')
     # clear the hop list
@@ -331,6 +368,7 @@ def restart_trace():
     
 @app.route("/error/<error_message>")
 def error(error_message):
+    '''Error handling for tracemyroute'''
     return render_template("tracemyroute_error.html", error_message=error_message)
 
 if __name__ == "__main__":
