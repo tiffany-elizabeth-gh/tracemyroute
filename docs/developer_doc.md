@@ -3,7 +3,7 @@ This guide covers envivornment set up, user interaction flow, known issues, and 
 
 ## Overview
 Tracemyroute is an interactive search engine allowing a user to search a destination and follow the path to get there (via hops), collecting information on each hop along the way. The hop data is displayed in a stream and then plotted on a folium map which is displayed in an html along with the full hop list and the option to start a trace again.
-See [README](README.md) for the general overview.
+See [README](https://github.com/tpugh-ia/tracemyroute/blob/main/README.md#user-guide) for the general overview.
 
 ## Project Specs
 This application currently includes the following functionality:
@@ -20,7 +20,7 @@ This application currently includes the following functionality:
 - Unsuccessful traceroutes, due to an invalid destination input, unsuccessfully linking a destination URL to a hostname, or a traceroute resulting in no hops, result in a user being presented with an error html and given the opportunity to try again.
 
 ## Install Notes
-General installation notes can be found in the [User Guide](https://github.com/tpugh-ia/tracemyroute/blob/8be278fb25bf74f7f8db630c11a2df509a1ee8b1/README.md). 
+General installation notes can be found in the [User Guide](https://github.com/tpugh-ia/tracemyroute/blob/main/README.md#user-guide). 
 
 It is important to set up the api_keys.py file correctly for the API key to be imported correctly and for the code to work properly.
 
