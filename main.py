@@ -36,12 +36,15 @@ import source_address
 import dest_address
 from api_keys import access_token  # must contain this format: access_token = "1234567890" 
 
+# pythonanywhere deployment
 # adjust mysite to your project root
-os.chdir("tracemyroute")
+# check if running on pythonanywhere
+if 'PYTHONANYWHERE_SITE' is os.environ:
+    os.chdir("tracemyroute")
+    print("working folder is", os.getcwd(), file=sys.stderr)
 
-print("got that far", file=sys.stderr)
 
-# setting up the environment
+# setting up the application environment
 app = Flask(__name__)
 
 # setting up the global space for cache
@@ -58,7 +61,8 @@ handler = ipinfo.getHandler(access_token)
 
 
 # setting up app.config for global access to map overlay
-app.config["CyberRisk"] = pd.read_csv("Cyber_security.csv")
+app.config["CyberRisk"] = pd.read_csv("Cyber_security.csv")    # for level of cybersecurity risk
+app.config["countries"] = "countries.geojson"    # for political countries
 
 
 # beginning code
@@ -137,7 +141,7 @@ def stream_hop_data(destination, source=False):
             hop_list.append({"ip": "* * *", "hostname": "N/A", "country": "N/A", 
                             "city": "N/A", "region": "N/A", "latitude": "N/A", "longitude": "N/A"})
             hop_count += 1
-            yield f"{hop_count}: * * *<br>"
+            yield f"{hop_count}: * * *<br>\n"    # for pythonanywhere need a \n at end
             
         else: 
             # reviewing hop details
@@ -246,7 +250,7 @@ def plot_map():
         #)
 
         # Add the GeoJSON data to the map
-        geojson_data = "countries.geojson"
+        geojson_data = app.config["countries"]
 
         # setting up zoom/base for map
         center_lat, center_lon, zoom_start = get_lat_long_center(hop_list)
