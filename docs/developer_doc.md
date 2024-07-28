@@ -20,7 +20,7 @@ This application currently includes the following functionality:
 - Unsuccessful traceroutes, due to an invalid destination input, unsuccessfully linking a destination URL to a hostname, or a traceroute resulting in no hops, result in a user being presented with an error html and given the opportunity to try again.
 
 ## Install Notes
-General installation notes can be found in the [User Guide](https://github.com/tpugh-ia/tracemyroute/blob/main/README.md#user-guide). 
+General installation notes can be found in the [User Guide/README](https://github.com/tpugh-ia/tracemyroute/blob/main/README.md#user-guide). 
 
 It is important to set up the api_keys.py file correctly for the API key to be imported correctly and for the code to work properly.
 
