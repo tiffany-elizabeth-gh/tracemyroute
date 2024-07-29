@@ -51,6 +51,13 @@ To get started, all it takes is four quick steps:
 3. Set up API key from IpInfo in a file titled api_keys.py (make sure api_keys.py is in your root folder)
 4. Open main.py and run!
 
+### When running from a terminal:
+1. Download tracemyroute repository
+2. Open OS terminal
+3. Use cd to jump to project root folder (i.e. cd /Users/<myname>/Desktop/tracemyroute
+4. Run pip install --upgrade -r requirements.txt
+5. Run tracemyroute: python main.py
+
 ### Running tracemyroute:
 When the code is run your browser will display the starting point for tracemyroute, prompting the user to enter a destination url. Upon clicking "Start Trace" the screen will change showing the stream of hop data. When the trace is complete, a button will appear for the user to "Plot Map." Clicking this will take the user to the results page that displays three things: 1) the folium map tracing each hop (with optional clicking for more details for each hop) 2) the hop list with hop details and 3) the option to begin a new trace. 
 
