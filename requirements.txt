@@ -1,9 +1,14 @@
-flask==3.0.3
-folium==0.16.0
-ipinfo==5.0.1
-requests==2.32.3
-markupsafe==2.1.5
-pandas==2.2.2
-cachelib==0.13.0
-numpy==1.23.2
-gunicorn==22.0.0
+'''You will need these external libraries for the code ro run properly.
+You can also copy and paste the code below to your terminal to install them all at once.
+pip install --upgrade -r requirements.txt
+'''
+
+flask >= 3.0.3
+folium >= 0.16.0
+ipinfo >= 5.0.1
+requests >= 2.32.3
+markupsafe >= 2.1.5
+pandas >= 2.2.2
+cachelib >= 0.13.0
+numpy >= 1.23.2
+gunicorn >= 22.0.0
