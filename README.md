@@ -37,7 +37,7 @@ IpInfo is an IP Address Database that works well within the Python environment p
 
 Obtaining an API Key from IpInfo is essential for this code to function. To obtain your own API key, visit [ipinfo.io](https://ipinfo.io/signup). 
 
-Once you have your own API key, create an api_keys.py file (in .gitignore if you are in Github) and copy/paste the line below into your .py file replacing "abcdefg123456" with your API key. Be sure to keep the " " around your API key.
+Once you have your own API key, update the api_keys.py.template file, filling in the access_token with your API key (be sure to add " " around it), rename the file by removing the .template so that it can be called appropriately and also recognized by gitignore. Alternative, you can copy/paste the line below replacing "abcdefg123456" with your API key. Be sure to keep the " " around your API key.
 ##
     access_token = "abcdefg123456"
 
