@@ -28,7 +28,7 @@ Python 3.10 or higher. This is essential as certain libraries may not be availab
 
 You can install the required libraries using the following command in your terminal or command prompt accessing the requirements.txt:
 ##
-    pip -r requirements.txt
+    pip install --upgrade -r requirements.txt
 
 In order for this program to run properly with all features activated, each of these libraries need to be installed in your python 3.10 (or higher) environment.
 
