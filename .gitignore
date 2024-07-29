@@ -1,5 +1,10 @@
+# custom ignores
 api_keys.py
 
+# all files in tmp (or data)
+tmp/*
+
+# for Mac-specific operating systems
 .DS_store
 
 # Byte-compiled / optimized / DLL files
