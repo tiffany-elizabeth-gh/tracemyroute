@@ -18,18 +18,18 @@ Just as with the internal deployment of this application, an API key from IPInfo
 ## Steps to Deploy
 1. Create/Login in to your PythonAnywhere Account
 2. Navigate to the Console tab and open a Bash Console
-3. You should find yourself in the root directory, change your directory to your "mysite" folder. You can copy the text below, but be sure to replace <mysite> with your directory name.
-##
-    cd <mysite>/
-
+3. You should find yourself in your "mysite" folder.
 4. Git Clone the tracemyroute server_deploy repository.
 ##
-    git clone https://github.com/tpugh-ia/tracemyroute.git
+    git clone -b server_deploy --single-branch https://github.com/tpugh-ia/tracemyroute.git
 
 5. Now you should have a new directory in your <mysite> directory titled "tracemyroute". You can check this by typing "ls" into the bash console terminal and it should show a list of directories in <mysite> including "tracemyroute".
-6. Whether in the same window or a new window, navigate to the Files tab. (IMPORTANT: Do NOT close/exit the Bash console. It needs to remain active for the virtual environment of your application.)
+6. (This step can also be done directly in the Bash console, whatever you prefer.) Whether in the same window or a new window, navigate to the Files tab. (IMPORTANT: Do NOT close/exit the Bash console. It needs to remain active for the virtual environment of your application.)
 7. In the Files tab, navigate to <mysite>/tracemyroute and locate the api_keys.py.template file. Edit this file, replacing <your key here> with your "API Key" (don't forget to include " " around your API key string).
-8. Rename the file to be just api_keys.py and save.
+8. In your Bash console, change directories to tracemyroute/ and rename the api_keys file to be just api_keys.py
+##
+    mv api_keys.py.template api_keys.py
+
 9. Navigate to the Web tab within your PythonAnywhere profile to set up your environment.
 10. Scroll down to where you'll see Code: and Virualenv:
 ![pythonanywhere_webenv](https://github.com/user-attachments/assets/375d27d7-b6bb-4114-90da-5e94b16d5308)
@@ -38,19 +38,6 @@ Just as with the internal deployment of this application, an API key from IPInfo
 
 11. The WSGI configuration file should automatically be populated, click it to make sure that the environment is set up properly. Once you click the link, it should look something like this:
 ![pythonanywhere_wsgi](https://github.com/user-attachments/assets/76a716bf-1f88-461c-8d5d-2e90812a313a)
-
-    Notice line 11. Be sure to replace <mysite> with your site name.
-    If your wsgi environment doesn't look like this and you are running into errors with deployment, here's code you can copy and paste into your wsgi.py file.
-##
-    import sys
-
-    # add your project directory to the sys.path
-    project_home = '/home/tpugh/tracemyroute'
-    if project_home not in sys.path:
-        sys.path = [project_home] + sys.path
-    
-    # import flask app but need to call it "application" for WSGI to work
-    from main import app as application  # noqa
 
 12. If you've made any changes to your wsgi.py file be sure to Save.
 13. Navigate back to the Web tab, scroll down to the Code: section and check that the Python version is 3.10 (or higher, but PythonAnywhere as of 2024 hasn't released any version of Python higher than 3.10).
