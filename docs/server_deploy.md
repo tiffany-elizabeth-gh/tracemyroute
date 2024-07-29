@@ -32,17 +32,17 @@ Just as with the internal deployment of this application, an API key from IPInfo
 
 9. Navigate to the Web tab within your PythonAnywhere profile to set up your environment.
 10. Scroll down to where you'll see Code: and Virualenv:
-![pythonanywhere_webenv](https://github.com/user-attachments/assets/375d27d7-b6bb-4114-90da-5e94b16d5308)
+![584_pythonanywhere_setup](https://github.com/user-attachments/assets/cb7f0503-9b31-4e22-97b6-a0fd2c56cc44)
 
-    You'll want to make sure to set up your Source code and Working directory to point to the correct directories. Your's should say "/home/<mysite>/tracemyroute" and "/home/<mysite>/tracemyroute/" where <mysite> is replaced by your site name.
+
+    You'll want to make sure to set up your Source code and Working directory to point to the correct directories. Your's should say "/home/<mysite>/tracemyroute/" and "/home/<mysite>/" where <mysite> is replaced by your site name.
 
 11. The WSGI configuration file should automatically be populated, click it to make sure that the environment is set up properly. Once you click the link, it should look something like this:
 ![pythonanywhere_wsgi](https://github.com/user-attachments/assets/76a716bf-1f88-461c-8d5d-2e90812a313a)
 
 12. If you've made any changes to your wsgi.py file be sure to Save.
 13. Navigate back to the Web tab, scroll down to the Code: section and check that the Python version is 3.10 (or higher, but PythonAnywhere as of 2024 hasn't released any version of Python higher than 3.10).
-14. Check the Virtualenv section to make sure the virtualenv link is present. It should be something like "/home/<mysite>/.virtualenvs/tracemyroute". If it isn't, PythonAnywhere has a great step-by-step tool for setting up virtual environments; you can check it out [here](https://help.pythonanywhere.com/pages/Virtualenvs/). (Note: you can use the same Bash Console we started with to set up your virtual environment. You can find it open in the Console tab.)
-15. Now, your virtual environment is ready to go, so scroll back up to the top of the page on the Web tab and click "Reload <mysite>/pythonanywhere.com". Wait for the spinning wheel to stop and click the link located under Configuration for <mysite>.pythonanywhere.com
+14. Scroll back up to the top of the Web tab and click "Reload <mysite>/pythonanywhere.com". Wait for the spinning wheel to stop and click the link located under Configuration for <mysite>.pythonanywhere.com
 16. Your server is live and ready!
 
 ## Code Notes
@@ -53,10 +53,9 @@ There were a couple of adjustments to the code that had to be done in main.py fo
 - The main difference between the internal environment and the pythonanywhere server is the ability to call the geojson url. Pythonanywhere didn't work well with this so the geojson file is added and configured for global access, simiarly to the Cyber_security.csv.
 - In **display_hop_data()** the return is changed to include a response header ['X-Accel-Buffering'] which is needed for nginx, specific to PythonAnywhere
 - Changing the geojson file to a global variable, meant changing the code for folium.Chloropleth from collecting geo_data from a URL to the global variable: geojson_data
-- The map.save is directed to save at "tracemyroute/templates/map_{timestamp}.html". This works for both the external and internal environments, but was necessary for the PythonAnywhere environment.
 
 ## Potential Issues
-The deployment came about through a lot of trial and error and community troubleshooting. Some hurdles to navigate that became critical for it to work was calling the PythonAnywhere environment correctly and identifying the environment appropriately. Errors with this still could occur and could require further troubleshooting. Due to the nature of PythonAnywhere and free accounts, servers can often overload quickly, which could cause temporary errors in the running of this application. As this is newly deployed, we are also aware that there may be more issues to overcome in the smooth running of this application on an external server. That is why this code lives in a dedicated server_deploy branch for further debugging and finessing.
+The deployment came about through a lot of trial and error and community troubleshooting. Some hurdles to navigate that became critical for it to work was calling the PythonAnywhere environment correctly and identifying the environment appropriately. Errors with this still could occur and could require further troubleshooting. Due to the nature of PythonAnywhere and free accounts, servers can often overload quickly, which could cause temporary errors in the running of this application. As this is newly deployed, we are also aware that there may be more issues to overcome in the smooth running of this application on an external server. That is why this code lives in a dedicated server_deploy branch (and not part of the official tracemyroute v1.0.0 release) for further debugging and finessing.
 
 
 
