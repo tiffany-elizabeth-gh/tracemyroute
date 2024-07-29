@@ -82,7 +82,15 @@ def stream_hop_data(destination, source=False):
     '''Stream hop data. Starting with displaying destination url/IP address and source IP address.
     Each hop displays IP address, hostname, city/state/country/post code, latitutde/longitude, if available.
     If no data is available "* * *" is displayed.
-    Each hop is added to hop_list.'''
+    Each hop is added to hop_list.
+    
+    Args:
+        destination: destination URL is user input from html form
+    
+    Returns:
+        streamed hop data
+        button to plot map
+    '''
 
     # get destination ip
     destination_ip = socket.gethostbyname(destination)
@@ -169,7 +177,15 @@ def stream_hop_data(destination, source=False):
     yield html
 
 def get_lat_long_center(hop_list):
-    '''Defines folium map's center based on the hop_list results'''
+    '''Defines folium map's center based on the hop_list results
+    
+    Args:
+        hop_list: populated from stream_hop_data
+    
+    Returns:
+        lat_center, lon_center, and zoom_start for building the plot map
+    '''
+    
     lat_sum = 0
     count = 0
     lon_sum = 0
@@ -330,7 +346,15 @@ def plot_map():
 @app.route("/results/<map>")
 def results(map):
     '''Display final traceroute hop list, folium map, and an option to begin tracemyroute again.
-    tracemyroute_results.html is called'''
+    tracemyroute_results.html is called.
+    
+    Args:
+        map: the plotted folium map is used to build the results page
+    
+    Returns: 
+        template for tracemyroute_results to display folium map, traceroute hop list, 
+        and simple form to begin a traceroute again.
+    '''
 
     # pull hop_list
     hop_list = app.config["hop_list"]
@@ -368,7 +392,14 @@ def restart_trace():
     
 @app.route("/error/<error_message>")
 def error(error_message):
-    '''Error handling for tracemyroute'''
+    '''Error handling for tracemyroute
+    
+    Args:
+        error_message: string that populates the error message on the tracemyroute_error.html page
+    
+    Returns:
+        template to display error message on tracemyroute_error.html
+    '''
     return render_template("tracemyroute_error.html", error_message=error_message)
 
 if __name__ == "__main__":
