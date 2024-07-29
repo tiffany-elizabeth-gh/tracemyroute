@@ -20,9 +20,13 @@ This application currently includes the following functionality:
 - Unsuccessful traceroutes, due to an invalid destination input, unsuccessfully linking a destination URL to a hostname, or a traceroute resulting in no hops, result in a user being presented with an error html and given the opportunity to try again.
 
 ## Install Notes
-General installation notes can be found in the [User Guide](https://github.com/tpugh-ia/tracemyroute/blob/main/README.md#user-guide). 
+General installation notes can be found in the [User Guide](https://github.com/tpugh-ia/tracemyroute/blob/main/README.md#user-guide).
 
-It is important to set up the api_keys.py file correctly for the API key to be imported correctly and for the code to work properly.
+1. Set up the environment (Python 3.10+ and requirements.txt)
+2. Get API key and format api_keys.py file
+3. Run main.py
+
+For deploying this application on a web server like pythonanywhere, check out [server_deploy.md](https://github.com/tpugh-ia/tracemyroute/blob/7abc3751f4fbfbf2991fb5bd6cf283dc896eacc9/docs/server_deploy.md).
 
 ## User Interaction and Code Flow
 The following is a walk through from start to finish of what happens as the user interacts with this application.
