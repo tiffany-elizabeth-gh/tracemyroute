@@ -1,0 +1,4 @@
+''' Use this python file to add your IPInfo API key in order to 
+integrate your specific API key when deploying in an environment like PythonAnywhere'''
+
+access_token = <your key here>
