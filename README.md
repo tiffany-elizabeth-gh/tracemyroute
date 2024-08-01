@@ -17,14 +17,14 @@ It starts with a destination url. Enter the interested destination as a valid UR
 Python 3.10 or higher. This is essential as certain libraries may not be available or compatible with older versions. (Note: this code was built in a python3.12 environment but also test ran on a python3.10 environment.)
 
 ### Python Libraries:
-- Flask
-* Folium
-+ IPInfo - See API Requirements below for important set up information
-- Requests
-* Markupsafe
-+ Pandas
-- Cachelib
-* Numpy
+- flask
+* folium
++ iPInfo - See API Requirements below for important set up information
+- requests
+* markupsafe
++ pandas
+- cachelib
+* numpy
 
 You can install the required libraries using the following command in your terminal or command prompt accessing the requirements.txt:
 ##
