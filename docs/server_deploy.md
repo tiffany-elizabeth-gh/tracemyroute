@@ -2,7 +2,7 @@
 This guide covers deploying the tracemyroute application on a server environment, specifically PythonAnywhere. While there are PythonAnywhere-specifics to deploy, this guide will hopefully be helpful to future deployments in other server environments.
 
 ## Overview
-If you haven't already, it would be helpful to review the tracemyroute [Developer's Guide](https://github.com/tpugh-ia/tracemyroute/blob/main/docs/developer_doc.md#developers-guide) for a more thorough overview. This guide will just go over the steps to deploy in a PythonAnywhere environment.
+If you haven't already, it would be helpful to review the tracemyroute [Developer's Guide](https://github.com/tiffany-elizabeth-gh/tracemyroute/blob/main/docs/developer_doc.md#developers-guide) for a more thorough overview. This guide will just go over the steps to deploy in a PythonAnywhere environment.
 
 ### PythonAnywhere
 >PythonAnywhere is an online integrated development environment and web hosting service based on the Python programming language. Founded by Giles Thomas and Robert Smithson in 2012, it provides in-browser access to server-based Python and Bash command-line interfaces, along with a code editor with syntax highlighting.
@@ -13,7 +13,7 @@ PythonAnywhere is a great place to get started when working with python code and
 If you don't have an account already, it is easy to get started! [Register here](https://www.pythonanywhere.com/registration/register/beginner/) or if you want to learn more visit [PythonAnywhere](www.pythonanywhere.com)
 
 ### IPInfo
-Just as with the internal deployment of this application, an API key from IPInfo is needed for server deployment. If you haven't done so already, obtain a free API key from [IPInfo](https://ipinfo.io/). For further instructions, read the [Developer's Guide](https://github.com/tpugh-ia/tracemyroute/blob/main/docs/developer_doc.md#developers-guide).
+Just as with the internal deployment of this application, an API key from IPInfo is needed for server deployment. If you haven't done so already, obtain a free API key from [IPInfo](https://ipinfo.io/). For further instructions, read the [Developer's Guide](https://github.com/tiffany-elizabeth-gh/tracemyroute/blob/main/docs/developer_doc.md#developers-guide).
 
 ## Steps to Deploy
 1. Create/Login in to your PythonAnywhere Account
