@@ -58,7 +58,7 @@ To get started, all it takes is four quick steps:
 4. Run pip install --upgrade -r requirements.txt
 5. Run tracemyroute: python main.py
 
-If you are looking to run this application on a web server, check out the [server_deploy.md](https://github.com/tpugh-ia/tracemyroute/blob/7abc3751f4fbfbf2991fb5bd6cf283dc896eacc9/docs/server_deploy.md).
+If you are looking to run this application on a web server, check out the [server_deploy.md](https://github.com/tiffany-elizabeth-gh/tracemyroute/blob/7abc3751f4fbfbf2991fb5bd6cf283dc896eacc9/docs/server_deploy.md).
 
 ### Running tracemyroute:
 When the code is run your browser will display the starting point for tracemyroute, prompting the user to enter a destination url. Upon clicking "Start Trace" the screen will change showing the stream of hop data. When the trace is complete, a button will appear for the user to "Plot Map." Clicking this will take the user to the results page that displays three things: 1) the folium map tracing each hop (with optional clicking for more details for each hop) 2) the hop list with hop details and 3) the option to begin a new trace. 
@@ -71,7 +71,7 @@ Tracemyroute is configured to handle errors such as invalid URL entries or desti
 ![tracemyroute_error](https://github.com/user-attachments/assets/9555209f-09d3-4864-a2c4-69cc95c0fbe3)
 
 ## Limitations
-It was the original design and goal to deploy this code in an external environment such as pythonanywhere or Render to make the tool more accessible. Certain web platforms, such as these, limit the scope of this application because of the operating system access required to complete the traceroute(s). The team was able to successfully deploy tracemyroute on pythonanywhere, and the steps can be found within the [server_deploy.md](https://github.com/tpugh-ia/tracemyroute/blob/7abc3751f4fbfbf2991fb5bd6cf283dc896eacc9/docs/server_deploy.md). There are still limitations with running on a free server and unknown issues to debug at this time. The server-specific deploy code can be found in the server_deploy branch.
+It was the original design and goal to deploy this code in an external environment such as pythonanywhere or Render to make the tool more accessible. Certain web platforms, such as these, limit the scope of this application because of the operating system access required to complete the traceroute(s). The team was able to successfully deploy tracemyroute on pythonanywhere, and the steps can be found within the [server_deploy.md](https://github.com/tiffany-elizabeth-gh/tracemyroute/blob/7abc3751f4fbfbf2991fb5bd6cf283dc896eacc9/docs/server_deploy.md). There are still limitations with running on a free server and unknown issues to debug at this time. The server-specific deploy code can be found in the server_deploy branch.
 
 ## Acknowledgements
 Thank you to Professor Harding for his guidance, assistance, continued help, and patience as this project proved to be trickier than expected. This could not have gotten to this place without him. And thank you to my 2024 cybersecurity course for the inspiration and introduction into cybersecurity.
