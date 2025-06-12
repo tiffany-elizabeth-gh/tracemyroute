@@ -3,7 +3,7 @@ This guide covers envivornment set up, user interaction flow, known issues, and 
 
 ## Overview
 Tracemyroute is an interactive search engine allowing a user to search a destination and follow the path to get there (via hops), collecting information on each hop along the way. The hop data is displayed in a stream and then plotted on a folium map which is displayed in an html along with the full hop list and the option to start a trace again.
-See [README](https://github.com/tpugh-ia/tracemyroute/blob/main/README.md#user-guide) for the general overview.
+See [README](https://github.com/tiffany-elizabeth-gh/tracemyroute/blob/main/README.md#user-guide) for the general overview.
 
 ## Project Specs
 This application currently includes the following functionality:
@@ -20,13 +20,13 @@ This application currently includes the following functionality:
 - Unsuccessful traceroutes, due to an invalid destination input, unsuccessfully linking a destination URL to a hostname, or a traceroute resulting in no hops, result in a user being presented with an error html and given the opportunity to try again.
 
 ## Install Notes
-General installation notes can be found in the [User Guide](https://github.com/tpugh-ia/tracemyroute/blob/main/README.md#user-guide).
+General installation notes can be found in the [User Guide](https://github.com/tiffany-elizabeth-gh/tracemyroute/blob/main/README.md#user-guide).
 
 1. Set up the environment (Python 3.10+ and requirements.txt)
 2. Get API key and format api_keys.py file
 3. Run main.py
 
-For deploying this application on a web server like pythonanywhere, check out [server_deploy.md](https://github.com/tpugh-ia/tracemyroute/blob/7abc3751f4fbfbf2991fb5bd6cf283dc896eacc9/docs/server_deploy.md).
+For deploying this application on a web server like pythonanywhere, check out [server_deploy.md](https://github.com/tiffany-elizabeth-gh/tracemyroute/blob/7abc3751f4fbfbf2991fb5bd6cf283dc896eacc9/docs/server_deploy.md).
 
 ## User Interaction and Code Flow
 The following is a walk through from start to finish of what happens as the user interacts with this application.
@@ -83,7 +83,7 @@ As the name suggests, this is the core of the code and will call all necessary f
 ## Known Issues
 Overall the code runs smoothly but there are areas still being worked through or puzzles not quite solved.
 * The code runs well on a developer server but when it was attempted to set up the code in a web server platform like pythonanywhere or Render, the code failed to work. The two biggest hurdles involved the code requiring access to the user's operating system and this not being possible in a cloud-based server like Render, and it not being possible to be a superuser in pythonanywhere. This prevented future troubleshooting in a web-based environment. So more unknown errors could be possible.
-	* 	**Update:** Certain servery deploy strategies have been applied and work but there is still more debugging to be done. To get started in an environment like pythonanywhere, check out [server_deploy.md](https://github.com/tpugh-ia/tracemyroute/blob/main/docs/server_deploy.md#server-deploy-guide).
+	* 	**Update:** Certain servery deploy strategies have been applied and work but there is still more debugging to be done. To get started in an environment like pythonanywhere, check out [server_deploy.md](https://github.com/tiffany-elizabeth-gh/tracemyroute/blob/main/docs/server_deploy.md#server-deploy-guide).
 * It was the original intent to include a source IP address input but there was trouble with setting up accurate ways to verify the source IP address and integrating this within the traceroute function itself with subprocess. It appears that manually inputting a source IP address is only possible on certain operating systems (and does not include Windows).
 * Considering the numerous ways a URL can be written, the current code only handles certain structures of URLs and does not include structures like apply.host.edu/page. So while apply.host.edu/page might be a valid URL it may return invalid URL if socket.gethostname cannot verify it. Although, there is current handling for this that works in some cases where URL is parsed through to fit within the UTF-8 structure.
 * Timeout for a traceroute was not solved in this code rendition. Certain traceroutes can take a significant amount of time and currently there is not technical set-up for setting a maximum time to wait.
